@@ -9,6 +9,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Localization;
+using NzbDrone.Core.Notifications.Plex.WatchStats;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
@@ -26,14 +27,16 @@ namespace NzbDrone.Core.Notifications.Plex.Server
     {
         private readonly ICached<Version> _versionCache;
         private readonly IPlexServerProxy _plexServerProxy;
+        private readonly IPlexWatchStatsService _plexWatchStatsService;
         private readonly IRootFolderService _rootFolderService;
         private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public PlexServerService(ICacheManager cacheManager, IPlexServerProxy plexServerProxy, IRootFolderService rootFolderService, ILocalizationService localizationService, Logger logger)
+        public PlexServerService(ICacheManager cacheManager, IPlexServerProxy plexServerProxy, IPlexWatchStatsService plexWatchStatsService, IRootFolderService rootFolderService, ILocalizationService localizationService, Logger logger)
         {
             _versionCache = cacheManager.GetCache<Version>(GetType(), "versionCache");
             _plexServerProxy = plexServerProxy;
+            _plexWatchStatsService = plexWatchStatsService;
             _rootFolderService = rootFolderService;
             _localizationService = localizationService;
             _logger = logger;
@@ -159,6 +162,11 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                 if (sections.Empty())
                 {
                     return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsPlexValidationNoTvLibraryFound"));
+                }
+
+                if (settings.ImportWatchStats)
+                {
+                    _plexWatchStatsService.Test(settings);
                 }
             }
             catch (PlexAuthenticationException ex)

@@ -192,6 +192,30 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'watchedOnPlex',
+          label: () => translate('WatchedOnPlex'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
+          name: 'viewsLast30Days',
+          label: () => translate('ViewsLast30Days'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
+          name: 'lastViewedAt',
+          label: () => translate('LastViewed'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
+          name: 'viewTrend',
+          label: () => translate('PlexViewTrend'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
           name: 'genres',
           label: () => translate('Genres'),
           isSortable: false,

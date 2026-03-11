@@ -45,6 +45,10 @@ interface SeriesIndexOverviewInfoProps {
   seasonCount: number;
   path: string;
   sizeOnDisk?: number;
+  watchedOnPlex?: boolean;
+  viewsLast30Days?: number;
+  lastViewedAt?: string;
+  viewTrend?: 'up' | 'down' | 'flat' | 'none';
   sortKey: string;
 }
 
@@ -90,6 +94,26 @@ const rows = [
     name: 'sizeOnDisk',
     showProp: 'showSizeOnDisk',
     valueProp: 'sizeOnDisk',
+  },
+  {
+    name: 'watchedOnPlex',
+    showProp: 'showSizeOnDisk',
+    valueProp: 'watchedOnPlex',
+  },
+  {
+    name: 'viewsLast30Days',
+    showProp: 'showSizeOnDisk',
+    valueProp: 'viewsLast30Days',
+  },
+  {
+    name: 'lastViewedAt',
+    showProp: 'showPreviousAiring',
+    valueProp: 'lastViewedAt',
+  },
+  {
+    name: 'viewTrend',
+    showProp: 'showSeasonCount',
+    valueProp: 'viewTrend',
   },
 ];
 
@@ -201,6 +225,56 @@ function getInfoRowProps(
       title: translate('SizeOnDisk'),
       iconName: icons.DRIVE,
       label: formatBytes(sizeOnDisk),
+    };
+  }
+
+  if (name === 'watchedOnPlex') {
+    return {
+      title: translate('WatchedOnPlex'),
+      iconName: icons.HISTORY,
+      label: props.watchedOnPlex ? translate('Yes') : translate('No'),
+    };
+  }
+
+  if (name === 'viewsLast30Days') {
+    return {
+      title: translate('ViewsLast30Days'),
+      iconName: icons.HISTORY,
+      label: translate('CountViewsLast30Days', {
+        count: props.viewsLast30Days ?? 0,
+      }),
+    };
+  }
+
+  if (name === 'lastViewedAt' && props.lastViewedAt) {
+    return {
+      title: translate('LastViewedDate', {
+        date: formatDateTime(
+          props.lastViewedAt,
+          uiSettings.longDateFormat,
+          uiSettings.timeFormat
+        ),
+      }),
+      iconName: icons.CALENDAR,
+      label: getRelativeDate({
+        date: props.lastViewedAt,
+        shortDateFormat: uiSettings.shortDateFormat,
+        showRelativeDates: uiSettings.showRelativeDates,
+        timeFormat: uiSettings.timeFormat,
+        timeForToday: true,
+      }),
+    };
+  }
+
+  if (name === 'viewTrend') {
+    const viewTrend = props.viewTrend ?? 'none';
+
+    return {
+      title: translate('PlexViewTrend'),
+      iconName: icons.HISTORY,
+      label: translate(
+        `PlexViewTrend${viewTrend[0].toUpperCase()}${viewTrend.slice(1)}`
+      ),
     };
   }
 

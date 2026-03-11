@@ -38,6 +38,14 @@ export interface Statistics {
   totalEpisodeCount: number;
   monitoredEpisodeCount: number;
   lastAired?: string;
+  watchedOnPlex: boolean;
+  neverWatchedOnPlex: boolean;
+  viewsLast30Days: number;
+  viewsPrevious30Days: number;
+  viewsAllTime: number;
+  lastViewedAt?: string;
+  daysSinceLastView?: number;
+  viewTrend: 'up' | 'down' | 'flat' | 'none';
 }
 
 export interface Season {

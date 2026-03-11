@@ -128,6 +128,10 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     episodeFileCount = 0,
     totalEpisodeCount = 0,
     sizeOnDisk = 0,
+    watchedOnPlex = false,
+    viewsLast30Days = 0,
+    lastViewedAt,
+    viewTrend = 'none',
   } = statistics;
 
   const link = `/series/${titleSlug}`;
@@ -247,6 +251,10 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               seasonCount={seasonCount}
               qualityProfile={qualityProfile}
               sizeOnDisk={sizeOnDisk}
+              watchedOnPlex={watchedOnPlex}
+              viewsLast30Days={viewsLast30Days}
+              lastViewedAt={lastViewedAt}
+              viewTrend={viewTrend}
               path={path}
               sortKey={sortKey}
               {...overviewOptions}

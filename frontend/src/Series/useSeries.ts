@@ -113,6 +113,45 @@ const SORT_PREDICATES = {
     return item.statistics?.sizeOnDisk ?? 0;
   },
 
+  watchedOnPlex: (item: Series, _direction: SortDirection) => {
+    return item.statistics?.watchedOnPlex ? 1 : 0;
+  },
+
+  neverWatchedOnPlex: (item: Series, _direction: SortDirection) => {
+    return item.statistics?.neverWatchedOnPlex ? 1 : 0;
+  },
+
+  viewsLast30Days: (item: Series, _direction: SortDirection) => {
+    return item.statistics?.viewsLast30Days ?? 0;
+  },
+
+  lastViewedAt: (item: Series, direction: SortDirection) => {
+    const lastViewedAt = item.statistics?.lastViewedAt;
+
+    if (lastViewedAt) {
+      return moment(lastViewedAt).unix();
+    }
+
+    if (direction === sortDirections.DESCENDING) {
+      return -Number.MAX_VALUE;
+    }
+
+    return Number.MAX_VALUE;
+  },
+
+  viewTrend: (item: Series, _direction: SortDirection) => {
+    switch (item.statistics?.viewTrend) {
+      case 'up':
+        return 3;
+      case 'flat':
+        return 2;
+      case 'down':
+        return 1;
+      default:
+        return 0;
+    }
+  },
+
   network: (item: Series, _direction: SortDirection) => {
     const network = item.network;
 
@@ -256,6 +295,42 @@ const FILTER_PREDICATES = {
     const predicate = getFilterTypePredicate(type);
     const sizeOnDisk = item.statistics?.sizeOnDisk ?? 0;
     return predicate(sizeOnDisk, filterValue);
+  },
+
+  watchedOnPlex: (item: Series, filterValue: boolean, type: FilterType) => {
+    const predicate = getFilterTypePredicate(type);
+    return predicate(item.statistics?.watchedOnPlex ?? false, filterValue);
+  },
+
+  neverWatchedOnPlex: (
+    item: Series,
+    filterValue: boolean,
+    type: FilterType
+  ) => {
+    const predicate = getFilterTypePredicate(type);
+    return predicate(item.statistics?.neverWatchedOnPlex ?? true, filterValue);
+  },
+
+  viewsLast30Days: (item: Series, filterValue: number, type: FilterType) => {
+    const predicate = getFilterTypePredicate(type);
+    return predicate(item.statistics?.viewsLast30Days ?? 0, filterValue);
+  },
+
+  lastViewedAt: (
+    item: Series,
+    filterValue: string | Date,
+    type: FilterType
+  ) => {
+    return dateFilterPredicate(
+      item.statistics?.lastViewedAt,
+      filterValue,
+      type
+    );
+  },
+
+  viewTrend: (item: Series, filterValue: string, type: FilterType) => {
+    const predicate = getFilterTypePredicate(type);
+    return predicate(item.statistics?.viewTrend ?? 'none', filterValue);
   },
 
   hasMissingSeason: (item: Series, filterValue: boolean, type: FilterType) => {
@@ -443,6 +518,34 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     label: () => translate('SizeOnDisk'),
     type: filterBuilderTypes.NUMBER,
     valueType: filterBuilderValueTypes.BYTES,
+  },
+  {
+    name: 'watchedOnPlex',
+    label: () => translate('WatchedOnPlex'),
+    type: filterBuilderTypes.EXACT,
+    valueType: filterBuilderValueTypes.BOOL,
+  },
+  {
+    name: 'neverWatchedOnPlex',
+    label: () => translate('NeverWatchedOnPlex'),
+    type: filterBuilderTypes.EXACT,
+    valueType: filterBuilderValueTypes.BOOL,
+  },
+  {
+    name: 'viewsLast30Days',
+    label: () => translate('ViewsLast30Days'),
+    type: filterBuilderTypes.NUMBER,
+  },
+  {
+    name: 'lastViewedAt',
+    label: () => translate('LastViewed'),
+    type: filterBuilderTypes.DATE,
+    valueType: filterBuilderValueTypes.DATE,
+  },
+  {
+    name: 'viewTrend',
+    label: () => translate('PlexViewTrend'),
+    type: filterBuilderTypes.EXACT,
   },
   {
     name: 'genres',

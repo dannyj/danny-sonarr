@@ -121,6 +121,10 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     episodeFileCount = 0,
     totalEpisodeCount = 0,
     sizeOnDisk = 0,
+    watchedOnPlex = false,
+    viewsLast30Days = 0,
+    lastViewedAt,
+    viewTrend = 'none',
   } = statistics;
 
   const link = `/series/${titleSlug}`;
@@ -264,6 +268,10 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         added={added}
         seasonCount={seasonCount}
         sizeOnDisk={sizeOnDisk}
+        watchedOnPlex={watchedOnPlex}
+        viewsLast30Days={viewsLast30Days}
+        lastViewedAt={lastViewedAt}
+        viewTrend={viewTrend}
         path={path}
         qualityProfile={qualityProfile}
         showQualityProfile={showQualityProfile}

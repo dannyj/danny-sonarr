@@ -1,3 +1,4 @@
+using NzbDrone.Core.Notifications.Plex.WatchStats;
 using NzbDrone.Core.SeriesStats;
 
 namespace Sonarr.Api.V5.Series;
@@ -11,6 +12,14 @@ public class SeriesStatisticsResource
     public int MonitoredEpisodeCount { get; set; }
     public long SizeOnDisk { get; set; }
     public List<string>? ReleaseGroups { get; set; }
+    public bool WatchedOnPlex { get; set; }
+    public bool NeverWatchedOnPlex { get; set; }
+    public int ViewsLast30Days { get; set; }
+    public int ViewsPrevious30Days { get; set; }
+    public int ViewsAllTime { get; set; }
+    public DateTime? LastViewedAt { get; set; }
+    public int? DaysSinceLastView { get; set; }
+    public PlexViewTrend ViewTrend { get; set; }
 
     public decimal PercentOfEpisodes
     {
@@ -38,7 +47,15 @@ public static class SeriesStatisticsResourceMapper
             TotalEpisodeCount = model.TotalEpisodeCount,
             MonitoredEpisodeCount = model.MonitoredEpisodeCount,
             SizeOnDisk = model.SizeOnDisk,
-            ReleaseGroups = model.ReleaseGroups
+            ReleaseGroups = model.ReleaseGroups,
+            WatchedOnPlex = model.WatchedOnPlex,
+            NeverWatchedOnPlex = model.NeverWatchedOnPlex,
+            ViewsLast30Days = model.ViewsLast30Days,
+            ViewsPrevious30Days = model.ViewsPrevious30Days,
+            ViewsAllTime = model.ViewsAllTime,
+            LastViewedAt = model.LastViewedAt,
+            DaysSinceLastView = model.DaysSinceLastView,
+            ViewTrend = model.ViewTrend
         };
     }
 }

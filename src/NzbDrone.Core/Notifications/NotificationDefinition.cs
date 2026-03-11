@@ -1,5 +1,6 @@
 using System;
 using Equ;
+using NzbDrone.Core.Notifications.Plex.Server;
 using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Notifications
@@ -63,7 +64,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnManualInteractionRequired { get; set; }
 
         [MemberwiseEqualityIgnore]
-        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade) || OnImportComplete || OnRename || OnSeriesAdd || OnSeriesDelete || OnEpisodeFileDelete || (OnEpisodeFileDelete && OnEpisodeFileDeleteForUpgrade) || OnHealthIssue || OnHealthRestored || OnApplicationUpdate || OnManualInteractionRequired;
+        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade) || OnImportComplete || OnRename || OnSeriesAdd || OnSeriesDelete || OnEpisodeFileDelete || (OnEpisodeFileDelete && OnEpisodeFileDeleteForUpgrade) || OnHealthIssue || OnHealthRestored || OnApplicationUpdate || OnManualInteractionRequired || (Settings as PlexServerSettings)?.ImportWatchStats == true;
 
         public bool Equals(NotificationDefinition other)
         {

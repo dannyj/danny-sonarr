@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Notifications.Plex.WatchStats;
 
 namespace NzbDrone.Core.SeriesStats
 {
@@ -12,17 +13,29 @@ namespace NzbDrone.Core.SeriesStats
     public class SeriesStatisticsService : ISeriesStatisticsService
     {
         private readonly ISeriesStatisticsRepository _seriesStatisticsRepository;
+        private readonly IPlexSeriesWatchStatisticsRepository _plexSeriesWatchStatisticsRepository;
 
-        public SeriesStatisticsService(ISeriesStatisticsRepository seriesStatisticsRepository)
+        public SeriesStatisticsService(ISeriesStatisticsRepository seriesStatisticsRepository, IPlexSeriesWatchStatisticsRepository plexSeriesWatchStatisticsRepository)
         {
             _seriesStatisticsRepository = seriesStatisticsRepository;
+            _plexSeriesWatchStatisticsRepository = plexSeriesWatchStatisticsRepository;
         }
 
         public List<SeriesStatistics> SeriesStatistics()
         {
             var seasonStatistics = _seriesStatisticsRepository.SeriesStatistics();
+            var plexStatistics = _plexSeriesWatchStatisticsRepository.GetAggregates();
 
-            return seasonStatistics.GroupBy(s => s.SeriesId).Select(s => MapSeriesStatistics(s.ToList())).ToList();
+            var result = seasonStatistics.GroupBy(s => s.SeriesId)
+                .Select(s => MapSeriesStatistics(s.ToList(), plexStatistics.GetValueOrDefault(s.Key)))
+                .ToList();
+
+            foreach (var plexOnlyStatistic in plexStatistics.Values.Where(x => result.All(r => r.SeriesId != x.SeriesId)))
+            {
+                result.Add(MergePlexStatistics(new SeriesStatistics(), plexOnlyStatistic));
+            }
+
+            return result;
         }
 
         public SeriesStatistics SeriesStatistics(int seriesId)
@@ -31,13 +44,13 @@ namespace NzbDrone.Core.SeriesStats
 
             if (stats == null || stats.Count == 0)
             {
-                return new SeriesStatistics();
+                return MergePlexStatistics(new SeriesStatistics(), _plexSeriesWatchStatisticsRepository.GetAggregate(seriesId));
             }
 
-            return MapSeriesStatistics(stats);
+            return MapSeriesStatistics(stats, _plexSeriesWatchStatisticsRepository.GetAggregate(seriesId));
         }
 
-        private SeriesStatistics MapSeriesStatistics(List<SeasonStatistics> seasonStatistics)
+        private SeriesStatistics MapSeriesStatistics(List<SeasonStatistics> seasonStatistics, PlexSeriesWatchStatisticsAggregate plexStatistics)
         {
             var seriesStatistics = new SeriesStatistics
             {
@@ -58,6 +71,50 @@ namespace NzbDrone.Core.SeriesStats
             seriesStatistics.NextAiring = nextAiring?.NextAiring;
             seriesStatistics.PreviousAiring = previousAiring?.PreviousAiring;
             seriesStatistics.LastAired = lastAired?.LastAired;
+
+            return MergePlexStatistics(seriesStatistics, plexStatistics);
+        }
+
+        private SeriesStatistics MergePlexStatistics(SeriesStatistics seriesStatistics, PlexSeriesWatchStatisticsAggregate plexStatistics)
+        {
+            plexStatistics ??= new PlexSeriesWatchStatisticsAggregate
+            {
+                SeriesId = seriesStatistics.SeriesId
+            };
+
+            if (seriesStatistics.SeriesId == 0)
+            {
+                seriesStatistics.SeriesId = plexStatistics.SeriesId;
+            }
+
+            seriesStatistics.ViewsLast30Days = plexStatistics.ViewsLast30Days;
+            seriesStatistics.ViewsPrevious30Days = plexStatistics.ViewsPrevious30Days;
+            seriesStatistics.ViewsAllTime = plexStatistics.ViewsAllTime;
+            seriesStatistics.LastViewedAt = plexStatistics.LastViewedAt;
+            seriesStatistics.WatchedOnPlex = plexStatistics.ViewsAllTime > 0;
+            seriesStatistics.NeverWatchedOnPlex = plexStatistics.ViewsAllTime == 0;
+
+            if (plexStatistics.LastViewedAt.HasValue)
+            {
+                seriesStatistics.DaysSinceLastView = (System.DateTime.UtcNow.Date - plexStatistics.LastViewedAt.Value.Date).Days;
+            }
+
+            if (plexStatistics.ViewsLast30Days == 0 && plexStatistics.ViewsPrevious30Days == 0)
+            {
+                seriesStatistics.ViewTrend = PlexViewTrend.None;
+            }
+            else if (plexStatistics.ViewsLast30Days > plexStatistics.ViewsPrevious30Days)
+            {
+                seriesStatistics.ViewTrend = PlexViewTrend.Up;
+            }
+            else if (plexStatistics.ViewsLast30Days < plexStatistics.ViewsPrevious30Days)
+            {
+                seriesStatistics.ViewTrend = PlexViewTrend.Down;
+            }
+            else
+            {
+                seriesStatistics.ViewTrend = PlexViewTrend.Flat;
+            }
 
             return seriesStatistics;
         }

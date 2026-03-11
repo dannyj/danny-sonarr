@@ -155,6 +155,42 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
         </SortMenuItem>
 
         <SortMenuItem
+          name="watchedOnPlex"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onPress={onSortSelect}
+        >
+          {translate('WatchedOnPlex')}
+        </SortMenuItem>
+
+        <SortMenuItem
+          name="viewsLast30Days"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onPress={onSortSelect}
+        >
+          {translate('ViewsLast30Days')}
+        </SortMenuItem>
+
+        <SortMenuItem
+          name="lastViewedAt"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onPress={onSortSelect}
+        >
+          {translate('LastViewed')}
+        </SortMenuItem>
+
+        <SortMenuItem
+          name="viewTrend"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onPress={onSortSelect}
+        >
+          {translate('PlexViewTrend')}
+        </SortMenuItem>
+
+        <SortMenuItem
           name="tags"
           sortKey={sortKey}
           sortDirection={sortDirection}

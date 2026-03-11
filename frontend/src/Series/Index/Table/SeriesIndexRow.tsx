@@ -149,6 +149,10 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     totalEpisodeCount = 0,
     sizeOnDisk = 0,
     releaseGroups = [],
+    watchedOnPlex = false,
+    viewsLast30Days = 0,
+    lastViewedAt,
+    viewTrend = 'none',
   } = statistics;
 
   return (
@@ -392,6 +396,47 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               {formatBytes(sizeOnDisk)}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'watchedOnPlex') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {watchedOnPlex ? translate('Yes') : translate('No')}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'viewsLast30Days') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {viewsLast30Days}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'lastViewedAt') {
+          return (
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore ts(2739)
+            <RelativeDateCell
+              key={name}
+              className={styles[name]}
+              date={lastViewedAt}
+              component={VirtualTableRowCell}
+            />
+          );
+        }
+
+        if (name === 'viewTrend') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {translate(
+                `PlexViewTrend${viewTrend[0].toUpperCase()}${viewTrend.slice(
+                  1
+                )}`
+              )}
             </VirtualTableRowCell>
           );
         }

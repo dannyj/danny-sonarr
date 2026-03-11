@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             Host = "";
             Port = 32400;
             UpdateLibrary = true;
+            ImportWatchStats = false;
             SignIn = "startOAuth";
         }
 
@@ -57,11 +58,14 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldDefinition(7, Label = "NotificationsSettingsUpdateLibrary", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(8, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText")]
+        [FieldDefinition(8, Label = "NotificationsPlexSettingsImportWatchStats", Type = FieldType.Checkbox, HelpText = "NotificationsPlexSettingsImportWatchStatsHelpText")]
+        public bool ImportWatchStats { get; set; }
+
+        [FieldDefinition(9, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText")]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Plex")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(9, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText")]
+        [FieldDefinition(10, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText")]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Plex")]
         public string MapTo { get; set; }
 

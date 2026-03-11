@@ -22,6 +22,10 @@ interface SeriesIndexPosterInfoProps {
   seasonCount: number;
   path: string;
   sizeOnDisk?: number;
+  watchedOnPlex?: boolean;
+  viewsLast30Days?: number;
+  lastViewedAt?: string;
+  viewTrend?: 'up' | 'down' | 'flat' | 'none';
   ratings: Ratings;
   tags: number[];
   sortKey: string;
@@ -44,6 +48,10 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     seasonCount,
     path,
     sizeOnDisk = 0,
+    watchedOnPlex = false,
+    viewsLast30Days = 0,
+    lastViewedAt,
+    viewTrend = 'none',
     ratings,
     tags,
     sortKey,
@@ -166,6 +174,50 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     return (
       <div className={styles.info} title={translate('SizeOnDisk')}>
         {formatBytes(sizeOnDisk)}
+      </div>
+    );
+  }
+
+  if (sortKey === 'watchedOnPlex') {
+    return (
+      <div className={styles.info} title={translate('WatchedOnPlex')}>
+        {watchedOnPlex ? translate('Yes') : translate('No')}
+      </div>
+    );
+  }
+
+  if (sortKey === 'viewsLast30Days') {
+    return (
+      <div className={styles.info} title={translate('ViewsLast30Days')}>
+        {translate('CountViewsLast30Days', { count: viewsLast30Days })}
+      </div>
+    );
+  }
+
+  if (sortKey === 'lastViewedAt' && lastViewedAt) {
+    return (
+      <div
+        className={styles.info}
+        title={formatDateTime(lastViewedAt, longDateFormat, timeFormat)}
+      >
+        {translate('LastViewed')}:{' '}
+        {getRelativeDate({
+          date: lastViewedAt,
+          shortDateFormat,
+          showRelativeDates,
+          timeFormat,
+          timeForToday: true,
+        })}
+      </div>
+    );
+  }
+
+  if (sortKey === 'viewTrend') {
+    return (
+      <div className={styles.info} title={translate('PlexViewTrend')}>
+        {translate(
+          `PlexViewTrend${viewTrend[0].toUpperCase()}${viewTrend.slice(1)}`
+        )}
       </div>
     );
   }

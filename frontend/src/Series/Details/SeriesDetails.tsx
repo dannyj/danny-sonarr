@@ -45,8 +45,11 @@ import useSeries, {
   useToggleSeriesMonitored,
 } from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import sortByProp from 'Utilities/Array/sortByProp';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
+import formatDateTime from 'Utilities/Date/formatDateTime';
+import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import {
   registerPagePopulator,
@@ -350,6 +353,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   }, [refetchEpisodes, refetchEpisodeFiles]);
 
   const originalCountryName = useCountryName(series?.originalCountry);
+  const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
+    useUiSettingsValues();
 
   useEffect(() => {
     populate();
@@ -401,6 +406,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     episodeFileCount = 0,
     sizeOnDisk = 0,
     lastAired,
+    watchedOnPlex = false,
+    viewsLast30Days = 0,
+    lastViewedAt,
+    viewTrend = 'none',
   } = statistics;
 
   const statusDetails = getSeriesStatusDetails(status);
@@ -724,6 +733,73 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       </div>
                     </Label>
                   ) : null}
+
+                  <Label
+                    className={styles.detailsLabel}
+                    title={translate('WatchedOnPlex')}
+                    size={sizes.LARGE}
+                  >
+                    <div>
+                      <Icon name={icons.HISTORY} size={17} />
+                      <span>
+                        {watchedOnPlex ? translate('Yes') : translate('No')}
+                      </span>
+                    </div>
+                  </Label>
+
+                  <Label
+                    className={styles.detailsLabel}
+                    title={translate('ViewsLast30Days')}
+                    size={sizes.LARGE}
+                  >
+                    <div>
+                      <Icon name={icons.HISTORY} size={17} />
+                      <span>{viewsLast30Days}</span>
+                    </div>
+                  </Label>
+
+                  {lastViewedAt ? (
+                    <Label
+                      className={styles.detailsLabel}
+                      title={formatDateTime(
+                        lastViewedAt,
+                        longDateFormat,
+                        timeFormat
+                      )}
+                      size={sizes.LARGE}
+                    >
+                      <div>
+                        <Icon name={icons.CALENDAR} size={17} />
+                        <span>
+                          {translate('LastViewed')}:{' '}
+                          {getRelativeDate({
+                            date: lastViewedAt,
+                            shortDateFormat,
+                            showRelativeDates,
+                            timeFormat,
+                            timeForToday: true,
+                          })}
+                        </span>
+                      </div>
+                    </Label>
+                  ) : null}
+
+                  <Label
+                    className={styles.detailsLabel}
+                    title={translate('PlexViewTrend')}
+                    size={sizes.LARGE}
+                  >
+                    <div>
+                      <Icon name={icons.HISTORY} size={17} />
+                      <span>
+                        {translate(
+                          `PlexViewTrend${viewTrend[0].toUpperCase()}${viewTrend.slice(
+                            1
+                          )}`
+                        )}
+                      </span>
+                    </div>
+                  </Label>
 
                   <Tooltip
                     anchor={
