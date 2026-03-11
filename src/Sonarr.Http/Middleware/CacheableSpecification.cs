@@ -46,11 +46,6 @@ namespace Sonarr.Http.Middleware
                 return false;
             }
 
-            if (path.EndsWith("/initialize.json"))
-            {
-                return false;
-            }
-
             if (path.StartsWith("/feed", StringComparison.CurrentCultureIgnoreCase))
             {
                 return false;

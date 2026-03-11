@@ -1,0 +1,18 @@
+services:
+  sonarr:
+    platform: ${SONARR_PLATFORM:-linux/arm64}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TARGET_RUNTIME: ${SONARR_TARGET_RUNTIME:-linux-arm64}
+    image: sonarr-local:latest
+    container_name: sonarr-local
+    user: "${SONARR_UID:-1000}:${SONARR_GID:-1000}"
+    ports:
+      - "${SONARR_PORT:-8989}:8989"
+    volumes:
+      - ./data/config:/config
+      -  /volumes/Series:/tv
+      - ./data/downloads:/downloads
+    restart: unless-stopped

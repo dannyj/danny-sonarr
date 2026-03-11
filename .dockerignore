@@ -1,0 +1,17 @@
+.git
+.github
+.vscode
+.devcontainer
+
+node_modules
+frontend/node_modules
+
+_artifacts
+_output
+_temp
+_tests
+
+docker/tests
+
+**/bin
+**/obj

@@ -72,7 +72,29 @@ module.exports = (env) => {
 
     optimization: {
       moduleIds: 'deterministic',
-      chunkIds: isProduction ? 'deterministic' : 'named'
+      chunkIds: isProduction ? 'deterministic' : 'named',
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          reactVendor: {
+            test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom|redux|react-redux|@tanstack)[\\/]/,
+            name: 'react-vendor',
+            priority: 30
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendor',
+            priority: 20
+          },
+          commons: {
+            minChunks: 2,
+            name: 'commons',
+            priority: 10,
+            reuseExistingChunk: true
+          }
+        }
+      }
     },
 
     performance: {

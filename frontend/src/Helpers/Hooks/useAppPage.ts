@@ -42,19 +42,7 @@ const createErrorsSelector = ({
     (state: AppState) => state.settings.importLists.error,
     (state: AppState) => state.settings.indexerFlags.error,
     (importListsError, indexerFlagsError) => {
-      const hasError = !!(
-        customFiltersError ||
-        seriesError ||
-        uiSettingsError ||
-        qualityProfilesError ||
-        languagesError ||
-        importListsError ||
-        indexerFlagsError ||
-        systemStatusError ||
-        tagsError ||
-        translationsError ||
-        uiSettingsError
-      );
+      const hasError = !!(seriesError || uiSettingsError || systemStatusError);
 
       return {
         hasError,
@@ -80,44 +68,28 @@ const useAppPage = () => {
   useCommands();
   useInitializeLanguage();
 
-  const { isFetched: isCustomFiltersFetched, error: customFiltersError } =
-    useCustomFilters();
+  const { error: customFiltersError } = useCustomFilters();
 
   const { isFetched: isSeriesFetched, error: seriesError } = useSeries();
 
   const { isFetched: isSystemStatusFetched, error: systemStatusError } =
     useSystemStatus();
 
-  const { isFetched: isTagsFetched, error: tagsError } = useTags();
+  const { error: tagsError } = useTags();
 
-  const { isFetched: isTranslationsFetched, error: translationsError } =
-    useTranslations();
+  const { error: translationsError } = useTranslations();
 
   const { isFetched: isUiSettingsFetched, error: uiSettingsError } =
     useUiSettings();
 
-  const { isFetched: isQualityProfilesFetched, error: qualityProfilesError } =
-    useQualityProfiles();
+  const { error: qualityProfilesError } = useQualityProfiles();
 
-  const { isFetched: isLanguagesFetched, error: languagesError } =
-    useLanguages();
-
-  const isAppStatePopulated = useSelector(
-    (state: AppState) =>
-      state.settings.importLists.isPopulated &&
-      state.settings.indexerFlags.isPopulated
-  );
+  const { error: languagesError } = useLanguages();
 
   const isPopulated =
-    isAppStatePopulated &&
-    isCustomFiltersFetched &&
     isSeriesFetched &&
     isSystemStatusFetched &&
-    isTagsFetched &&
-    isTranslationsFetched &&
-    isUiSettingsFetched &&
-    isQualityProfilesFetched &&
-    isLanguagesFetched;
+    isUiSettingsFetched;
 
   const { hasError, errors } = useSelector(
     createErrorsSelector({
