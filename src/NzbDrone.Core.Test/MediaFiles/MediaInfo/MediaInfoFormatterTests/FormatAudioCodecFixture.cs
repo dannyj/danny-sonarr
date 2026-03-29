@@ -67,5 +67,11 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
 
             MediaInfoFormatter.FormatAudioCodec(audioStreamModel, SceneName).Should().Be(audioStreamModel.Format);
         }
+
+        [Test]
+        public void should_return_null_when_audio_stream_is_null()
+        {
+            MediaInfoFormatter.FormatAudioCodec(null, SceneName).Should().BeNull();
+        }
     }
 }

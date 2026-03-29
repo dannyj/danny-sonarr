@@ -41,6 +41,7 @@
 .releaseGroups,
 .nextAiring,
 .previousAiring,
+.lastViewedAt,
 .added,
 .genres {
   composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
@@ -49,6 +50,8 @@
 }
 
 .seasonCount,
+.watchedOnPlex,
+.viewTrend,
 .certification {
   composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
 
@@ -87,6 +90,12 @@
 }
 
 .sizeOnDisk {
+  composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 120px;
+}
+
+.viewsLast30Days {
   composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
 
   flex: 0 0 120px;

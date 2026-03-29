@@ -9,6 +9,7 @@ interface CssExports {
   'episodeCount': string;
   'episodeProgress': string;
   'genres': string;
+  'lastViewedAt': string;
   'latestSeason': string;
   'monitorNewItems': string;
   'network': string;
@@ -28,6 +29,9 @@ interface CssExports {
   'status': string;
   'tags': string;
   'useSceneNumbering': string;
+  'viewTrend': string;
+  'viewsLast30Days': string;
+  'watchedOnPlex': string;
   'year': string;
 }
 export const cssExports: CssExports;

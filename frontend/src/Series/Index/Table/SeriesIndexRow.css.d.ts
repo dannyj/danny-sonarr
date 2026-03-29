@@ -12,8 +12,8 @@ interface CssExports {
   'episodeCount': string;
   'episodeProgress': string;
   'genres': string;
-  'latestSeason': string;
   'lastViewedAt': string;
+  'latestSeason': string;
   'link': string;
   'monitorNewItems': string;
   'network': string;

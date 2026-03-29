@@ -44,7 +44,6 @@ function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
     <div
       style={{
         display: 'flex',
-        justifyContent: 'space-between',
         ...style,
       }}
       className={styles.row}
