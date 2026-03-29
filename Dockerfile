@@ -7,7 +7,14 @@ WORKDIR /src
 COPY package.json yarn.lock .yarnrc tsconfig.json ./
 COPY frontend ./frontend
 
-RUN corepack enable && yarn install --frozen-lockfile
+RUN corepack enable && \
+    yarn config set network-timeout 600000 -g && \
+    for attempt in 1 2 3; do \
+      yarn install --frozen-lockfile && exit 0; \
+      if [ "$attempt" -eq 3 ]; then exit 1; fi; \
+      echo "yarn install failed, retrying ($attempt/3)..." >&2; \
+      sleep 15; \
+    done
 RUN yarn build --env production
 
 
