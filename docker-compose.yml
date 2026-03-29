@@ -13,6 +13,6 @@ services:
       - "${SONARR_PORT:-8989}:8989"
     volumes:
       - ./data/config:/config
-      -  /volumes/Series:/tv
+      - ${SONARR_TV_PATH:-./data/tv}:/tv
       - ./data/downloads:/downloads
     restart: unless-stopped

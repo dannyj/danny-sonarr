@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
                     ViewsAllTime = 15,
                     ViewsLast30Days = 8,
                     ViewsPrevious30Days = 3,
-                    LastViewedAt = DateTime.UtcNow.AddDays(-2)
+                    LastViewedAtString = DateTime.UtcNow.AddDays(-2).ToString("O")
                 });
 
             var result = Subject.SeriesStatistics(12);

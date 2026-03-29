@@ -13,6 +13,7 @@ interface CssExports {
   'episodeProgress': string;
   'genres': string;
   'latestSeason': string;
+  'lastViewedAt': string;
   'link': string;
   'monitorNewItems': string;
   'network': string;
@@ -33,6 +34,9 @@ interface CssExports {
   'status': string;
   'tags': string;
   'useSceneNumbering': string;
+  'viewTrend': string;
+  'viewsLast30Days': string;
+  'watchedOnPlex': string;
   'year': string;
 }
 export const cssExports: CssExports;

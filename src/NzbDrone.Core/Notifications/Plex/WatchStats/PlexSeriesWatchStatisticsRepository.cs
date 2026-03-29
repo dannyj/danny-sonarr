@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
                                SUM(CASE WHEN ""ViewedOn"" >= @last30Start THEN ""ViewCount"" ELSE 0 END) AS ViewsLast30Days,
                                SUM(CASE WHEN ""ViewedOn"" >= @previous30Start AND ""ViewedOn"" < @last30Start THEN ""ViewCount"" ELSE 0 END) AS ViewsPrevious30Days,
                                SUM(""ViewCount"") AS ViewsAllTime,
-                               MAX(""LastViewedAtUtc"") AS LastViewedAt
+                               MAX(""LastViewedAtUtc"") AS LastViewedAtString
                         FROM ""PlexSeriesWatchStatistics""
                         /**where**/
                         GROUP BY ""SeriesId""";

@@ -77,6 +77,7 @@
 .releaseGroups,
 .nextAiring,
 .previousAiring,
+.lastViewedAt,
 .added,
 .genres {
   composes: cell;
@@ -85,6 +86,8 @@
 }
 
 .seasonCount,
+.watchedOnPlex,
+.viewTrend,
 .certification {
   composes: cell;
 
@@ -126,6 +129,12 @@
 }
 
 .sizeOnDisk {
+  composes: cell;
+
+  flex: 0 0 120px;
+}
+
+.viewsLast30Days {
   composes: cell;
 
   flex: 0 0 120px;

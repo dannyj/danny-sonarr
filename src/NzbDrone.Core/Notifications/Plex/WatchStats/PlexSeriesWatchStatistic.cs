@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Notifications.Plex.WatchStats
@@ -20,6 +21,24 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
         public int ViewsLast30Days { get; set; }
         public int ViewsPrevious30Days { get; set; }
         public int ViewsAllTime { get; set; }
-        public DateTime? LastViewedAt { get; set; }
+        public string LastViewedAtString { get; set; }
+
+        public DateTime? LastViewedAt
+        {
+            get
+            {
+                if (LastViewedAtString == null)
+                {
+                    return null;
+                }
+
+                if (DateTime.TryParse(LastViewedAtString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal, out var parsed))
+                {
+                    return parsed;
+                }
+
+                return null;
+            }
+        }
     }
 }
