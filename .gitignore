@@ -154,6 +154,17 @@ geckodriver.exe
 _start
 _temp_*/**/*
 
+# Local Sonarr runtime data used by docker-compose development
+data/config/logs/
+data/config/logs.db
+data/config/logs.db-shm
+data/config/logs.db-wal
+data/config/sonarr.db
+data/config/sonarr.db-shm
+data/config/sonarr.db-wal
+data/config/MediaCover/
+data/config/Sentry/
+
 # Windows thumbnail cache files
 Thumbs.db
 
