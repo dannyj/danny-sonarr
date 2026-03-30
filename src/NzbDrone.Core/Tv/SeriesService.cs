@@ -3,6 +3,8 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.AutoTagging;
+using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Tv.Events;
@@ -42,6 +44,8 @@ namespace NzbDrone.Core.Tv
         private readonly IEpisodeService _episodeService;
         private readonly IBuildSeriesPaths _seriesPathBuilder;
         private readonly IAutoTaggingService _autoTaggingService;
+        private readonly ITrackedDownloadService _trackedDownloadService;
+        private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly Logger _logger;
 
         public SeriesService(ISeriesRepository seriesRepository,
@@ -49,6 +53,8 @@ namespace NzbDrone.Core.Tv
                              IEpisodeService episodeService,
                              IBuildSeriesPaths seriesPathBuilder,
                              IAutoTaggingService autoTaggingService,
+                             ITrackedDownloadService trackedDownloadService,
+                             IProvideDownloadClient downloadClientProvider,
                              Logger logger)
         {
             _seriesRepository = seriesRepository;
@@ -56,6 +62,8 @@ namespace NzbDrone.Core.Tv
             _episodeService = episodeService;
             _seriesPathBuilder = seriesPathBuilder;
             _autoTaggingService = autoTaggingService;
+            _trackedDownloadService = trackedDownloadService;
+            _downloadClientProvider = downloadClientProvider;
             _logger = logger;
         }
 
@@ -162,8 +170,46 @@ namespace NzbDrone.Core.Tv
         public void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion)
         {
             var series = _seriesRepository.Get(seriesIds).ToList();
+
+            RemoveTrackedDownloads(series);
+
             _seriesRepository.DeleteMany(seriesIds);
             _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion));
+        }
+
+        private void RemoveTrackedDownloads(List<Series> series)
+        {
+            var seriesIds = series.Select(s => s.Id).ToHashSet();
+            var tvdbIds = series.Select(s => s.TvdbId).ToHashSet();
+
+            var trackedDownloads = _trackedDownloadService.GetTrackedDownloads()
+                .Where(t =>
+                    t.RemoteEpisode?.Series != null &&
+                    (seriesIds.Contains(t.RemoteEpisode.Series.Id) || tvdbIds.Contains(t.RemoteEpisode.Series.TvdbId)))
+                .ToList();
+
+            var removedDownloadIds = new List<string>();
+
+            foreach (var trackedDownload in trackedDownloads)
+            {
+                try
+                {
+                    var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+
+                    downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
+                    trackedDownload.DownloadItem.Removed = true;
+                    removedDownloadIds.Add(trackedDownload.DownloadItem.DownloadId);
+                }
+                catch (System.Exception e)
+                {
+                    _logger.Error(e, "Couldn't remove item {0} from client while deleting series", trackedDownload.DownloadItem.Title);
+                }
+            }
+
+            if (removedDownloadIds.Any())
+            {
+                _trackedDownloadService.StopTracking(removedDownloadIds);
+            }
         }
 
         public List<Series> GetAllSeries()
