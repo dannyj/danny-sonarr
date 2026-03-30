@@ -5,6 +5,7 @@ using NzbDrone.Common.TPL;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
@@ -42,6 +43,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     private readonly IMapCoversToLocal _coverMapper;
     private readonly IManageCommandQueue _commandQueueManager;
     private readonly IRootFolderService _rootFolderService;
+    private readonly ISeriesDownloadCleanupService _seriesDownloadCleanupService;
 
     private readonly LockByIdPool _seriesLockPool = new();
 
@@ -52,6 +54,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                         ISceneMappingService sceneMappingService,
                         IMapCoversToLocal coverMapper,
                         IManageCommandQueue commandQueueManager,
+                        ISeriesDownloadCleanupService seriesDownloadCleanupService,
                         IRootFolderService rootFolderService,
                         RootFolderValidator rootFolderValidator,
                         MappedNetworkDriveValidator mappedNetworkDriveValidator,
@@ -71,6 +74,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
         _coverMapper = coverMapper;
         _commandQueueManager = commandQueueManager;
+        _seriesDownloadCleanupService = seriesDownloadCleanupService;
         _rootFolderService = rootFolderService;
 
         SharedValidator.RuleFor(s => s.Path).Cascade(CascadeMode.Stop)
@@ -246,6 +250,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     [RestDeleteById]
     public ActionResult DeleteSeries(int id, bool deleteFiles = false, bool addImportListExclusion = false)
     {
+        _seriesDownloadCleanupService.RemoveTrackedDownloads(_seriesService.GetSeries(new List<int> { id }));
         _seriesService.DeleteSeries(new List<int> { id }, deleteFiles, addImportListExclusion);
 
         return NoContent();

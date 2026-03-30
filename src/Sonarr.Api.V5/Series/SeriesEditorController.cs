@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Commands;
@@ -12,12 +13,14 @@ namespace Sonarr.Api.V5.Series;
 public class SeriesEditorController : Controller
 {
     private readonly ISeriesService _seriesService;
+    private readonly ISeriesDownloadCleanupService _seriesDownloadCleanupService;
     private readonly IManageCommandQueue _commandQueueManager;
     private readonly SeriesEditorValidator _seriesEditorValidator;
 
-    public SeriesEditorController(ISeriesService seriesService, IManageCommandQueue commandQueueManager, SeriesEditorValidator seriesEditorValidator)
+    public SeriesEditorController(ISeriesService seriesService, ISeriesDownloadCleanupService seriesDownloadCleanupService, IManageCommandQueue commandQueueManager, SeriesEditorValidator seriesEditorValidator)
     {
         _seriesService = seriesService;
+        _seriesDownloadCleanupService = seriesDownloadCleanupService;
         _commandQueueManager = commandQueueManager;
         _seriesEditorValidator = seriesEditorValidator;
     }
@@ -107,6 +110,7 @@ public class SeriesEditorController : Controller
     [HttpDelete]
     public object DeleteSeries([FromBody] SeriesEditorResource resource)
     {
+        _seriesDownloadCleanupService.RemoveTrackedDownloads(_seriesService.GetSeries(resource.SeriesIds));
         _seriesService.DeleteSeries(resource.SeriesIds, resource.DeleteFiles, resource.AddImportListExclusion);
 
         return new { };

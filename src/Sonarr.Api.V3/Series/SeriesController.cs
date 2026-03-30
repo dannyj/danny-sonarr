@@ -6,6 +6,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
@@ -44,6 +45,7 @@ namespace Sonarr.Api.V3.Series
         private readonly IMapCoversToLocal _coverMapper;
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly IRootFolderService _rootFolderService;
+        private readonly ISeriesDownloadCleanupService _seriesDownloadCleanupService;
 
         public SeriesController(IBroadcastSignalRMessage signalRBroadcaster,
                             ISeriesService seriesService,
@@ -52,6 +54,7 @@ namespace Sonarr.Api.V3.Series
                             ISceneMappingService sceneMappingService,
                             IMapCoversToLocal coverMapper,
                             IManageCommandQueue commandQueueManager,
+                            ISeriesDownloadCleanupService seriesDownloadCleanupService,
                             IRootFolderService rootFolderService,
                             RootFolderValidator rootFolderValidator,
                             MappedNetworkDriveValidator mappedNetworkDriveValidator,
@@ -71,6 +74,7 @@ namespace Sonarr.Api.V3.Series
 
             _coverMapper = coverMapper;
             _commandQueueManager = commandQueueManager;
+            _seriesDownloadCleanupService = seriesDownloadCleanupService;
             _rootFolderService = rootFolderService;
 
             SharedValidator.RuleFor(s => s.Path).Cascade(CascadeMode.Stop)
@@ -208,6 +212,7 @@ namespace Sonarr.Api.V3.Series
         [RestDeleteById]
         public void DeleteSeries(int id, bool deleteFiles = false, bool addImportListExclusion = false)
         {
+            _seriesDownloadCleanupService.RemoveTrackedDownloads(_seriesService.GetSeries(new List<int> { id }));
             _seriesService.DeleteSeries(new List<int> { id }, deleteFiles, addImportListExclusion);
         }
 
