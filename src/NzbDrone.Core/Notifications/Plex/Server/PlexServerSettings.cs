@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
             RuleFor(c => c.MapFrom).NotEmpty().Unless(c => c.MapTo.IsNullOrWhiteSpace());
             RuleFor(c => c.MapTo).NotEmpty().Unless(c => c.MapFrom.IsNullOrWhiteSpace());
+            RuleFor(c => c.WatchTriggeredSearchCooldownHours).InclusiveBetween(1, 168);
+            RuleFor(c => c.ImportWatchStats).Equal(true).When(c => c.TriggerMissingEpisodeSearchOnWatch);
         }
     }
 
@@ -27,6 +29,8 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             Port = 32400;
             UpdateLibrary = true;
             ImportWatchStats = false;
+            TriggerMissingEpisodeSearchOnWatch = false;
+            WatchTriggeredSearchCooldownHours = 24;
             SignIn = "startOAuth";
         }
 
@@ -61,11 +65,17 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldDefinition(8, Label = "NotificationsPlexSettingsImportWatchStats", Type = FieldType.Checkbox, HelpText = "NotificationsPlexSettingsImportWatchStatsHelpText")]
         public bool ImportWatchStats { get; set; }
 
-        [FieldDefinition(9, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText")]
+        [FieldDefinition(9, Label = "NotificationsPlexSettingsTriggerMissingEpisodeSearchOnWatch", Type = FieldType.Checkbox, HelpText = "NotificationsPlexSettingsTriggerMissingEpisodeSearchOnWatchHelpText", Advanced = true)]
+        public bool TriggerMissingEpisodeSearchOnWatch { get; set; }
+
+        [FieldDefinition(10, Label = "NotificationsPlexSettingsWatchTriggeredSearchCooldownHours", Type = FieldType.Number, HelpText = "NotificationsPlexSettingsWatchTriggeredSearchCooldownHoursHelpText", Unit = "hours", Advanced = true)]
+        public int WatchTriggeredSearchCooldownHours { get; set; }
+
+        [FieldDefinition(11, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText")]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Plex")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(10, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText")]
+        [FieldDefinition(12, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText")]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Plex")]
         public string MapTo { get; set; }
 

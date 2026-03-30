@@ -15,18 +15,21 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
         private readonly IPlexWatchStatsService _plexWatchStatsService;
         private readonly IPlexSeriesMatchService _plexSeriesMatchService;
         private readonly IPlexSeriesWatchStatisticsRepository _repository;
+        private readonly IPlexWatchTriggeredSearchService _plexWatchTriggeredSearchService;
         private readonly Logger _logger;
 
         public RefreshPlexSeriesStatsService(INotificationFactory notificationFactory,
                                              IPlexWatchStatsService plexWatchStatsService,
                                              IPlexSeriesMatchService plexSeriesMatchService,
                                              IPlexSeriesWatchStatisticsRepository repository,
+                                             IPlexWatchTriggeredSearchService plexWatchTriggeredSearchService,
                                              Logger logger)
         {
             _notificationFactory = notificationFactory;
             _plexWatchStatsService = plexWatchStatsService;
             _plexSeriesMatchService = plexSeriesMatchService;
             _repository = repository;
+            _plexWatchTriggeredSearchService = plexWatchTriggeredSearchService;
             _logger = logger;
         }
 
@@ -113,6 +116,7 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
                 .ToList();
 
             _repository.ReplaceForServer(plexServer.Definition.Id, aggregated);
+            _plexWatchTriggeredSearchService.Process(plexServer.Definition.Id, settings, matchedEvents);
 
             _logger.Info("Plex watch stats sync complete for {0}: fetched {1} events, matched {2}, skipped {3}, series updated {4}",
                 plexServer.Definition.Name,

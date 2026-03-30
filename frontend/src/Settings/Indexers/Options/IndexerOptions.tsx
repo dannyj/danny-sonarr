@@ -143,6 +143,22 @@ function IndexerOptions({
               {...settings.rssSyncInterval}
             />
           </FormGroup>
+
+          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('PlexWatchStatsSyncInterval')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.NUMBER}
+              name="plexWatchStatsSyncInterval"
+              min={0}
+              max={120}
+              unit="minutes"
+              helpText={translate('PlexWatchStatsSyncIntervalHelpText')}
+              helpTextWarning={translate('PlexWatchStatsSyncIntervalHelpTextWarning')}
+              onChange={handleInputChange}
+              {...settings.plexWatchStatsSyncInterval}
+            />
+          </FormGroup>
         </Form>
       ) : null}
     </FieldSet>

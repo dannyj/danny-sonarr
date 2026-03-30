@@ -29,9 +29,21 @@ namespace NzbDrone.Core.Test.Configuration
         }
 
         [Test]
+        public void Add_new_plex_watch_stats_interval_to_database()
+        {
+            const string key = "PlexWatchStatsSyncInterval";
+            const int value = 45;
+
+            Subject.PlexWatchStatsSyncInterval = value;
+
+            AssertUpsert(key, value);
+        }
+
+        [Test]
         public void Get_value_should_return_default_when_no_value()
         {
             Subject.RssSyncInterval.Should().Be(15);
+            Subject.PlexWatchStatsSyncInterval.Should().Be(60);
         }
 
         [Test]

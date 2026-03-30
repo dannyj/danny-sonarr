@@ -167,6 +167,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<ImportListStatus>("ImportListStatus").RegisterModel();
             Mapper.Entity<NotificationStatus>("NotificationStatus").RegisterModel();
             Mapper.Entity<PlexSeriesWatchStatistic>("PlexSeriesWatchStatistics").RegisterModel();
+            Mapper.Entity<PlexWatchTriggeredSearchState>("PlexWatchTriggeredSearchState").RegisterModel();
 
             Mapper.Entity<CustomFilter>("CustomFilters").RegisterModel();
 

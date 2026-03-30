@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Jobs
 
                     new ScheduledTask
                     {
-                        Interval = 12 * 60,
+                        Interval = GetPlexWatchStatsSyncInterval(),
                         TypeName = typeof(RefreshPlexSeriesStatsCommand).FullName
                     },
 
@@ -206,6 +206,23 @@ namespace NzbDrone.Core.Jobs
             return interval;
         }
 
+        private int GetPlexWatchStatsSyncInterval()
+        {
+            var interval = _configService.PlexWatchStatsSyncInterval;
+
+            if (interval > 0 && interval < 10)
+            {
+                return 10;
+            }
+
+            if (interval < 0)
+            {
+                return 0;
+            }
+
+            return interval;
+        }
+
         public void Handle(CommandExecutedEvent message)
         {
             var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.Body.GetType().FullName);
@@ -231,12 +248,16 @@ namespace NzbDrone.Core.Jobs
             var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
             rss.Interval = GetRssSyncInterval();
 
+            var plexWatchStats = _scheduledTaskRepository.GetDefinition(typeof(RefreshPlexSeriesStatsCommand));
+            plexWatchStats.Interval = GetPlexWatchStatsSyncInterval();
+
             var backup = _scheduledTaskRepository.GetDefinition(typeof(BackupCommand));
             backup.Interval = GetBackupInterval();
 
-            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, backup });
+            _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, plexWatchStats, backup });
 
             _cache.Find(rss.TypeName).Interval = rss.Interval;
+            _cache.Find(plexWatchStats.TypeName).Interval = plexWatchStats.Interval;
             _cache.Find(backup.TypeName).Interval = backup.Interval;
         }
     }
