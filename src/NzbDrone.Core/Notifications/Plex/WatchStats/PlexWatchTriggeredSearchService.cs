@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
 {
     public interface IPlexWatchTriggeredSearchService
     {
-        void Process(int plexServerDefinitionId, PlexServerSettings settings, List<(Series Series, PlexWatchEvent WatchEvent)> matchedEvents);
+        void Process(int plexServerDefinitionId, PlexServerSettings settings, List<(Series Series, PlexWatchEvent WatchEvent)> matchedEvents, bool allowSearchTriggering);
     }
 
     public class PlexWatchTriggeredSearchService : IPlexWatchTriggeredSearchService
@@ -31,9 +31,9 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
             _logger = logger;
         }
 
-        public void Process(int plexServerDefinitionId, PlexServerSettings settings, List<(Series Series, PlexWatchEvent WatchEvent)> matchedEvents)
+        public void Process(int plexServerDefinitionId, PlexServerSettings settings, List<(Series Series, PlexWatchEvent WatchEvent)> matchedEvents, bool allowSearchTriggering)
         {
-            if (!settings.TriggerMissingEpisodeSearchOnWatch || matchedEvents.Count == 0)
+            if (matchedEvents.Count == 0)
             {
                 return;
             }
@@ -74,6 +74,12 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
 
                 state.LastSeenViewedAtUtc = group.LastViewedAtUtc;
                 state.UpdatedAtUtc = now;
+
+                if (!allowSearchTriggering || !settings.TriggerMissingEpisodeSearchOnWatch)
+                {
+                    changedStates.Add(state);
+                    continue;
+                }
 
                 if (!group.Series.Monitored)
                 {

@@ -115,11 +115,15 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
 
     public class PlexWatchHistoryItem
     {
+        public string RatingKey { get; set; }
         public string Type { get; set; }
         public long ViewedAt { get; set; }
         public string GrandparentTitle { get; set; }
         public int? GrandparentYear { get; set; }
         public string GrandparentGuid { get; set; }
+        public string Title { get; set; }
+        public int? ParentIndex { get; set; }
+        public int? Index { get; set; }
         public int? AccountId { get; set; }
         public List<PlexWatchHistoryGuid> Guid { get; set; } = new();
         public List<PlexWatchHistoryMedia> Media { get; set; } = new();

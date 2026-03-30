@@ -15,6 +15,17 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
         public DateTime UpdatedAtUtc { get; set; }
     }
 
+    public class PlexSeriesWatchStatisticDelta
+    {
+        public int SeriesId { get; set; }
+        public int PlexServerDefinitionId { get; set; }
+        public DateTime ViewedOn { get; set; }
+        public int ViewCount { get; set; }
+        public DateTime? LastViewedAtUtc { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
+        public DateTime UpdatedAtUtc { get; set; }
+    }
+
     public class PlexSeriesWatchStatisticsAggregate
     {
         public int SeriesId { get; set; }

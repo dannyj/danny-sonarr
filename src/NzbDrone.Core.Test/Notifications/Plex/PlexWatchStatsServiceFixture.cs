@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
@@ -58,15 +59,16 @@ namespace NzbDrone.Core.Test.NotificationTests.Plex
                     }
                 });
 
-            var result = Subject.GetWatchEvents(_settings);
+            var result = Subject.GetWatchEvents(_settings, null, TimeSpan.FromHours(48));
 
-            result.Should().HaveCount(1);
-            result[0].SeriesTitle.Should().Be("30 Rock");
-            result[0].SeriesYear.Should().Be(2006);
-            result[0].FilePath.Should().Be("/tv/30 Rock/Season 01/30 Rock - S01E01.mkv");
-            result[0].User.Id.Should().Be("12");
-            result[0].Guids.Should().Contain(x => x.Source == "tvdb" && x.Value == "79488");
-            result[0].Guids.Should().Contain(x => x.Source == "imdb" && x.Value == "tt0496424");
+            result.Events.Should().HaveCount(1);
+            result.Events[0].SeriesTitle.Should().Be("30 Rock");
+            result.Events[0].SeriesYear.Should().Be(2006);
+            result.Events[0].FilePath.Should().Be("/tv/30 Rock/Season 01/30 Rock - S01E01.mkv");
+            result.Events[0].User.Id.Should().Be("12");
+            result.Events[0].Guids.Should().Contain(x => x.Source == "tvdb" && x.Value == "79488");
+            result.Events[0].Guids.Should().Contain(x => x.Source == "imdb" && x.Value == "tt0496424");
+            result.Events[0].EventKey.Should().NotBeNullOrWhiteSpace();
         }
 
         [Test]
@@ -87,7 +89,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Plex
                     }
                 });
 
-            Subject.GetWatchEvents(_settings).Should().BeEmpty();
+            Subject.GetWatchEvents(_settings, null, TimeSpan.FromHours(48)).Events.Should().BeEmpty();
         }
     }
 }

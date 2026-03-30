@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
     public interface IPlexSeriesWatchStatisticsRepository : IBasicRepository<PlexSeriesWatchStatistic>
     {
         void ReplaceForServer(int plexServerDefinitionId, IList<PlexSeriesWatchStatistic> statistics);
+        void UpsertDeltas(IList<PlexSeriesWatchStatisticDelta> statistics);
         Dictionary<int, PlexSeriesWatchStatisticsAggregate> GetAggregates();
         PlexSeriesWatchStatisticsAggregate GetAggregate(int seriesId);
     }
@@ -31,6 +32,34 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
             }
 
             InsertMany(statistics);
+        }
+
+        public void UpsertDeltas(IList<PlexSeriesWatchStatisticDelta> statistics)
+        {
+            if (statistics.Count == 0)
+            {
+                return;
+            }
+
+            const string sql = @"INSERT INTO ""PlexSeriesWatchStatistics""
+(""SeriesId"", ""PlexServerDefinitionId"", ""ViewedOn"", ""ViewCount"", ""LastViewedAtUtc"", ""CreatedAtUtc"", ""UpdatedAtUtc"")
+VALUES
+(@SeriesId, @PlexServerDefinitionId, @ViewedOn, @ViewCount, @LastViewedAtUtc, @CreatedAtUtc, @UpdatedAtUtc)
+ON CONFLICT(""SeriesId"", ""PlexServerDefinitionId"", ""ViewedOn"")
+DO UPDATE SET
+    ""ViewCount"" = ""PlexSeriesWatchStatistics"".""ViewCount"" + excluded.""ViewCount"",
+    ""LastViewedAtUtc"" = CASE
+        WHEN ""PlexSeriesWatchStatistics"".""LastViewedAtUtc"" IS NULL THEN excluded.""LastViewedAtUtc""
+        WHEN excluded.""LastViewedAtUtc"" IS NULL THEN ""PlexSeriesWatchStatistics"".""LastViewedAtUtc""
+        WHEN excluded.""LastViewedAtUtc"" > ""PlexSeriesWatchStatistics"".""LastViewedAtUtc"" THEN excluded.""LastViewedAtUtc""
+        ELSE ""PlexSeriesWatchStatistics"".""LastViewedAtUtc""
+    END,
+    ""UpdatedAtUtc"" = excluded.""UpdatedAtUtc"";";
+
+            using (var conn = _database.OpenConnection())
+            {
+                conn.Execute(sql, statistics);
+            }
         }
 
         public Dictionary<int, PlexSeriesWatchStatisticsAggregate> GetAggregates()

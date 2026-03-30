@@ -44,10 +44,14 @@ namespace NzbDrone.Core.Test.NotificationTests.Plex
                 .Setup(x => x.GetByServer(5, It.IsAny<IEnumerable<int>>()))
                 .Returns(new Dictionary<int, PlexWatchTriggeredSearchState>());
 
-            Subject.Process(5, _settings, new List<(Series Series, PlexWatchEvent WatchEvent)>
-            {
-                (_series, new PlexWatchEvent { ViewedAtUtc = DateTime.UtcNow.AddMinutes(-5) })
-            });
+            Subject.Process(
+                5,
+                _settings,
+                new List<(Series Series, PlexWatchEvent WatchEvent)>
+                {
+                    (_series, new PlexWatchEvent { ViewedAtUtc = DateTime.UtcNow.AddMinutes(-5) })
+                },
+                true);
 
             Mocker.GetMock<IManageCommandQueue>()
                 .Verify(x => x.Push(It.Is<RefreshSeriesCommand>(c => c.SeriesIds.Count == 1 && c.SeriesIds[0] == _series.Id), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Once);
@@ -79,10 +83,14 @@ namespace NzbDrone.Core.Test.NotificationTests.Plex
                     }
                 });
 
-            Subject.Process(5, _settings, new List<(Series Series, PlexWatchEvent WatchEvent)>
-            {
-                (_series, new PlexWatchEvent { ViewedAtUtc = now })
-            });
+            Subject.Process(
+                5,
+                _settings,
+                new List<(Series Series, PlexWatchEvent WatchEvent)>
+                {
+                    (_series, new PlexWatchEvent { ViewedAtUtc = now })
+                },
+                true);
 
             Mocker.GetMock<IManageCommandQueue>()
                 .Verify(x => x.Push(It.IsAny<RefreshSeriesCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never);
@@ -104,10 +112,14 @@ namespace NzbDrone.Core.Test.NotificationTests.Plex
                 .Setup(x => x.GetByServer(5, It.IsAny<IEnumerable<int>>()))
                 .Returns(new Dictionary<int, PlexWatchTriggeredSearchState>());
 
-            Subject.Process(5, _settings, new List<(Series Series, PlexWatchEvent WatchEvent)>
-            {
-                (_series, new PlexWatchEvent { ViewedAtUtc = viewedAtUtc })
-            });
+            Subject.Process(
+                5,
+                _settings,
+                new List<(Series Series, PlexWatchEvent WatchEvent)>
+                {
+                    (_series, new PlexWatchEvent { ViewedAtUtc = viewedAtUtc })
+                },
+                true);
 
             Mocker.GetMock<IManageCommandQueue>()
                 .Verify(x => x.Push(It.IsAny<RefreshSeriesCommand>(), It.IsAny<CommandPriority>(), It.IsAny<CommandTrigger>()), Times.Never);
