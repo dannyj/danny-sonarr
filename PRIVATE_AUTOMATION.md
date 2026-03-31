@@ -10,23 +10,23 @@ This repo is configured for a private fork workflow:
 
 Recommended branch layout:
 
-- `private-main`: deployable private branch
+- `production`: deployable private branch
 - `feature/*`: custom feature work
 - `automation/upstream-sync-*`: bot-created upstream merge branches
 
 ## GitHub Workflows
 
 - `.github/workflows/private-docker-publish.yml`
-  - Validates Docker builds on pull requests to `private-main`
+  - Validates Docker builds on pull requests to `production`
   - Builds `linux/amd64` and `linux/arm64`
   - Publishes `ghcr.io/<owner>/sonarr-private`
   - Tags include branch name and commit SHA
-  - Publishes `latest` from `private-main`
+  - Publishes `latest` from `production`
   - Optionally deploys on your server after publishing when deploy secrets are configured
 
 - `.github/workflows/private-upstream-sync.yml`
   - Fetches `Sonarr/Sonarr`
-  - Merges the selected upstream branch into a reusable sync branch from `private-main`
+  - Merges the selected upstream branch into a reusable sync branch from `production`
   - Creates or updates a PR for review
   - Fails if the merge needs manual conflict resolution
 
@@ -37,7 +37,7 @@ Use GHCR on the server instead of local builds:
 ```yaml
 services:
   sonarr:
-    image: ghcr.io/<owner>/sonarr-private:private-main
+    image: ghcr.io/<owner>/sonarr-private:production
     container_name: sonarr-private
     ports:
       - "8989:8989"
@@ -65,15 +65,15 @@ To let GitHub deploy directly to your Docker server, add these repository secret
 ## First-Time Setup
 
 1. Push this branch to your private repo only.
-2. Create `private-main` in the private repo if it does not already exist.
-3. Merge your feature branch into `private-main`.
+2. Create `production` in the private repo if it does not already exist.
+3. Merge your feature branch into `production`.
 4. Enable GitHub Actions in the private repo.
 5. On your server, log in to GHCR and switch Compose to the published image.
 6. If you want auto-deploy, add the deploy secrets listed above.
 
 ## Optional Hardening
 
-- Set the private repo default branch to `private-main`.
-- Add branch protection on `private-main`.
+- Set the private repo default branch to `production`.
+- Add branch protection on `production`.
 - Restrict Actions to the private repo.
 - Keep `origin` fetch-only and use `private` for all pushes.

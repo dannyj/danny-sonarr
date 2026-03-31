@@ -26,7 +26,7 @@ Tags:
 
 - feature branches: branch name, for example `feature-plex-watch-stats`
 - branch commits: `sha-<shortsha>`
-- `private-main`: also publishes `latest`
+- `production`: also publishes `latest`
 
 Example pull:
 
@@ -40,7 +40,7 @@ Upstream intake is handled in:
 
 - `.github/workflows/private-upstream-sync.yml`
 
-It merges from public `Sonarr/Sonarr` into a private sync branch and opens or updates a PR against `private-main`.
+It merges from public `Sonarr/Sonarr` into a private sync branch and opens or updates a PR against `production`.
 
 ## Local Build And Test
 
@@ -94,7 +94,7 @@ image: ghcr.io/dannyj/sonarr-private:latest
 or:
 
 ```yaml
-image: ghcr.io/dannyj/sonarr-private:private-main
+image: ghcr.io/dannyj/sonarr-private:production
 ```
 
 ## Related Reference

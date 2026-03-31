@@ -3,10 +3,10 @@ name: Private Docker Publish
 on:
   pull_request:
     branches:
-      - private-main
+      - production
   push:
     branches:
-      - private-main
+      - production
       - feature-*
       - feature/**
       - hotfix/**
@@ -51,7 +51,7 @@ jobs:
 
           if [ "${{ github.event_name }}" = "push" ]; then
             should_push=true
-            if [ "${{ github.ref_name }}" = "private-main" ] && \
+            if [ "${{ github.ref_name }}" = "production" ] && \
                [ -n "${{ secrets.DEPLOY_HOST }}" ] && \
                [ -n "${{ secrets.DEPLOY_USER }}" ] && \
                [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ] && \
@@ -100,7 +100,7 @@ jobs:
           tags: |
             type=ref,event=branch
             type=sha,prefix=sha-
-            type=raw,value=latest,enable=${{ github.ref_name == 'private-main' }}
+            type=raw,value=latest,enable=${{ github.ref_name == 'production' }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
