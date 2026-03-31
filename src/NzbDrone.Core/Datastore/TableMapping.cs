@@ -9,6 +9,7 @@ using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFilters;
 using NzbDrone.Core.CustomFormats;
+using NzbDrone.Core.Dashboard;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.Download;
@@ -170,6 +171,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<PlexProcessedWatchEvent>("PlexProcessedWatchEvents").RegisterModel();
             Mapper.Entity<PlexWatchTriggeredSearchState>("PlexWatchTriggeredSearchState").RegisterModel();
             Mapper.Entity<PlexWatchStatsSyncState>("PlexWatchStatsSyncState").RegisterModel();
+            Mapper.Entity<DashboardSnapshot>("DashboardSnapshots").RegisterModel();
 
             Mapper.Entity<CustomFilter>("CustomFilters").RegisterModel();
 

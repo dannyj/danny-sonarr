@@ -8,6 +8,7 @@ import ImportSeriesPage from 'AddSeries/ImportSeries/ImportSeriesPage';
 import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
+import DashboardPage from 'Dashboard/DashboardPage';
 import SeriesDetailsPage from 'Series/Details/SeriesDetailsPage';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
@@ -46,6 +47,8 @@ function AppRoutes() {
       */}
 
       <Route exact={true} path="/" component={SeriesIndex} />
+
+      <Route path="/dashboard" component={DashboardPage} />
 
       {window.Sonarr.urlBase && (
         <Route
