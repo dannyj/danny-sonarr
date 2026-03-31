@@ -113,6 +113,6 @@ public class SeriesEditorController : Controller
         _seriesDownloadCleanupService.RemoveTrackedDownloads(_seriesService.GetSeries(resource.SeriesIds));
         _seriesService.DeleteSeries(resource.SeriesIds, resource.DeleteFiles, resource.AddImportListExclusion);
 
-        return new { };
+        return NoContent();
     }
 }
