@@ -49,6 +49,12 @@ interface SidebarItem {
 
 const LINKS: SidebarItem[] = [
   {
+    iconName: icons.OVERVIEW,
+    title: 'Dashboard',
+    to: '/dashboard',
+  },
+
+  {
     iconName: icons.SERIES_CONTINUING,
     title: () => translate('Series'),
     to: '/',

@@ -12,7 +12,7 @@ services:
     ports:
       - "${SONARR_PORT:-8989}:8989"
     volumes:
-      - ./data/config:/config
-      - ${SONARR_TV_PATH:-./data/tv}:/tv
-      - ./data/downloads:/downloads
+      - ${SONARR_CONFIG_PATH:-/Users/danny/Documents/repos/Sonarr/data/config}:/config
+      - ${SONARR_TV_PATH:-/Users/danny/Documents/repos/Sonarr/data/tv}:/tv
+      - ${SONARR_DOWNLOADS_PATH:-/Users/danny/Documents/repos/Sonarr/data/downloads}:/downloads
     restart: unless-stopped

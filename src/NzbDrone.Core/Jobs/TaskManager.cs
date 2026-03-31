@@ -6,6 +6,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Core.Backup;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.Dashboard;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.HealthCheck;
@@ -108,6 +109,12 @@ namespace NzbDrone.Core.Jobs
                     {
                         Interval = GetPlexWatchStatsSyncInterval(),
                         TypeName = typeof(RefreshPlexSeriesStatsCommand).FullName
+                    },
+
+                    new ScheduledTask
+                    {
+                        Interval = 24 * 60,
+                        TypeName = typeof(CaptureDashboardSnapshotCommand).FullName
                     },
 
                     new ScheduledTask
