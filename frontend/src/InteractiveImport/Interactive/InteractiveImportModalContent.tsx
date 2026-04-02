@@ -851,12 +851,22 @@ function InteractiveImportModalContentInner(
     error,
     translate('InteractiveImportLoadError')
   );
+  const deleteErrorMessage = getErrorMessage(
+    deleteError,
+    translate('UnableToDeleteEpisodeFiles')
+  );
 
   useEffect(() => {
     if (!isReprocessing && wasReprocessing) {
       setReprocessingItems(new Set());
     }
   }, [isReprocessing, wasReprocessing]);
+
+  useEffect(() => {
+    if (deleteError) {
+      setInteractiveImportErrorMessage(deleteErrorMessage);
+    }
+  }, [deleteError, deleteErrorMessage]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

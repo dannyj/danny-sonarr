@@ -72,6 +72,7 @@ export const useDeleteEpisodeFiles = () => {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
         queryClient.invalidateQueries({ queryKey: ['/episode'] });
+        queryClient.invalidateQueries({ queryKey: ['/manualimport'] });
       },
     },
   });
