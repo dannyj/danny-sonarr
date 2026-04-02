@@ -392,7 +392,7 @@ namespace NzbDrone.Core.Datastore.PostgresMigration
                     var parameterName = $"p{i}";
                     columnNames.Add($"\"{columnName.Replace("\"", "\"\"")}\"");
                     parameterNames.Add($"@{parameterName}");
-                    parameters.Add(parameterName, ConvertValue(reader.IsDBNull(i) ? DBNull.Value : reader.GetValue(i), dataType));
+                    parameters.Add(parameterName, ConvertValue(reader.IsDBNull(i) ? null : reader.GetValue(i), dataType));
                 }
 
                 if (!columnNames.Any())
@@ -500,7 +500,7 @@ namespace NzbDrone.Core.Datastore.PostgresMigration
         {
             if (value == null || value == DBNull.Value)
             {
-                return DBNull.Value;
+                return null;
             }
 
             switch (dataType)
