@@ -395,6 +395,11 @@ namespace NzbDrone.Common.Extensions
             return Path.Combine(GetAppDataPath(appFolderInfo), LOG_DB);
         }
 
+        public static string GetPostgresMigrationState(this IAppFolderInfo appFolderInfo)
+        {
+            return Path.Combine(GetAppDataPath(appFolderInfo), "postgres-migration.json");
+        }
+
         public static string GetNlogConfigPath(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(appFolderInfo.StartUpFolder, NLOG_CONFIG_FILE);
