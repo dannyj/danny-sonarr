@@ -36,7 +36,18 @@ const useInteractiveImport = (params: InteractiveImportParams) => {
     },
   });
 
-  const items = data ?? DEFAULT_ITEMS;
+  const items = useMemo(() => {
+    const loadedItems = data ?? DEFAULT_ITEMS;
+
+    if (params.seasonNumber == null) {
+      return loadedItems;
+    }
+
+    return loadedItems.filter(
+      (item) => item.seasonNumber === params.seasonNumber
+    );
+  }, [data, params.seasonNumber]);
+
   const originalItems = [...items];
 
   const { data: sortedItems } = useMemo(() => {
