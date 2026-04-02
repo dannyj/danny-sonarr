@@ -8,7 +8,7 @@ on:
       upstream_branch:
         description: Public Sonarr branch to merge from
         required: false
-        default: main
+        default: v5-develop
         type: string
       target_branch:
         description: Private branch to open the sync PR against
@@ -21,7 +21,7 @@ permissions:
   pull-requests: write
 
 env:
-  DEFAULT_UPSTREAM_BRANCH: main
+  DEFAULT_UPSTREAM_BRANCH: v5-develop
   DEFAULT_TARGET_BRANCH: production
   UPSTREAM_REPOSITORY: Sonarr/Sonarr
 
