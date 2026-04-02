@@ -1,0 +1,44 @@
+.modalBody {
+  display: grid;
+  gap: 16px;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.warningList {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.notes {
+  color: var(--defaultColor);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.modalFooter {
+  composes: modalFooter from '~Components/Modal/ModalFooter.css';
+}
+
+@media only screen and (max-width: 600px) {
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+}
