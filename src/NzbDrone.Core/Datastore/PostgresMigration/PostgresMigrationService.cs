@@ -341,18 +341,28 @@ namespace NzbDrone.Core.Datastore.PostgresMigration
 
         private void CopySqliteTable(SQLiteConnection source, NpgsqlConnection target, string table)
         {
-            var targetColumnTypes = target.Query<(string ColumnName, string DataType)>(
-                @"SELECT column_name AS ColumnName, data_type AS DataType
+            var targetColumns = target.Query<(string ColumnName, string DataType, string IsIdentity, string IdentityGeneration)>(
+                @"SELECT column_name AS ColumnName,
+                         data_type AS DataType,
+                         is_identity AS IsIdentity,
+                         identity_generation AS IdentityGeneration
                   FROM information_schema.columns
                   WHERE table_schema = 'public' AND table_name = @table
                   ORDER BY ordinal_position",
                 new { table })
+                .ToList();
+
+            var targetColumnTypes = targetColumns
                 .ToDictionary(x => x.ColumnName, x => x.DataType, StringComparer.InvariantCultureIgnoreCase);
 
             if (!targetColumnTypes.Any())
             {
                 return;
             }
+
+            var hasAlwaysIdentityColumn = targetColumns.Any(x =>
+                x.IsIdentity.Equals("YES", StringComparison.InvariantCultureIgnoreCase) &&
+                x.IdentityGeneration.Equals("ALWAYS", StringComparison.InvariantCultureIgnoreCase));
 
             using var sourceCommand = source.CreateCommand();
             sourceCommand.CommandText = $"SELECT * FROM \"{table.Replace("\"", "\"\"")}\"";
@@ -390,7 +400,8 @@ namespace NzbDrone.Core.Datastore.PostgresMigration
                     continue;
                 }
 
-                var sql = $"INSERT INTO \"{table.Replace("\"", "\"\"")}\" ({string.Join(", ", columnNames)}) VALUES ({string.Join(", ", parameterNames)})";
+                var overrideClause = hasAlwaysIdentityColumn ? " OVERRIDING SYSTEM VALUE" : string.Empty;
+                var sql = $"INSERT INTO \"{table.Replace("\"", "\"\"")}\" ({string.Join(", ", columnNames)}){overrideClause} VALUES ({string.Join(", ", parameterNames)})";
                 target.Execute(sql, parameters);
             }
         }
