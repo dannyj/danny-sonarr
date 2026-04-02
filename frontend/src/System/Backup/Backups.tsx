@@ -14,6 +14,9 @@ import TableBody from 'Components/Table/TableBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
+import useSystemStatus from 'System/Status/useSystemStatus';
+import PostgresMigrationModal from 'System/PostgresMigration/PostgresMigrationModal';
+import { usePostgresMigrationStatus } from 'System/PostgresMigration/usePostgresMigration';
 import BackupRow from './BackupRow';
 import RestoreBackupModal from './RestoreBackupModal';
 import useBackups from './useBackups';
@@ -49,10 +52,14 @@ const columns: Column[] = [
 function Backups() {
   const executeCommand = useExecuteCommand();
   const { data: items, isLoading: isFetching, error, refetch } = useBackups();
+  const { data: systemStatus } = useSystemStatus();
+  const { data: postgresMigrationStatus } = usePostgresMigrationStatus();
 
   const isBackupExecuting = useCommandExecuting(CommandNames.Backup);
 
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
+  const [isPostgresMigrationModalOpen, setIsPostgresMigrationModalOpen] =
+    useState(false);
 
   const wasBackupExecuting = usePrevious(isBackupExecuting);
   const hasBackups = !!items.length;
@@ -70,6 +77,14 @@ function Backups() {
 
   const handleRestoreModalClose = useCallback(() => {
     setIsRestoreModalOpen(false);
+  }, []);
+
+  const handlePostgresMigrationPress = useCallback(() => {
+    setIsPostgresMigrationModalOpen(true);
+  }, []);
+
+  const handlePostgresMigrationModalClose = useCallback(() => {
+    setIsPostgresMigrationModalOpen(false);
   }, []);
 
   useEffect(() => {
@@ -94,11 +109,41 @@ function Backups() {
             iconName={icons.RESTORE}
             onPress={handleRestorePress}
           />
+
+          <PageToolbarButton
+            label="Migrate To Postgres"
+            iconName={icons.SETTINGS}
+            onPress={handlePostgresMigrationPress}
+          />
         </PageToolbarSection>
       </PageToolbar>
 
       <PageContentBody>
         {isFetching ? <LoadingIndicator /> : null}
+
+        {postgresMigrationStatus.state !== 'Idle' ? (
+          <Alert
+            kind={
+              postgresMigrationStatus.state === 'Succeeded'
+                ? kinds.SUCCESS
+                : postgresMigrationStatus.state === 'Failed'
+                  ? kinds.DANGER
+                  : kinds.WARNING
+            }
+          >
+            {postgresMigrationStatus.message || postgresMigrationStatus.state}
+            {postgresMigrationStatus.error
+              ? ` ${postgresMigrationStatus.error}`
+              : ''}
+          </Alert>
+        ) : null}
+
+        {systemStatus.databaseType !== 'SQLite' ? (
+          <Alert kind={kinds.INFO}>
+            Sonarr is currently using {systemStatus.databaseType}. The SQLite to
+            Postgres migration wizard is disabled.
+          </Alert>
+        ) : null}
 
         {!isFetching && !!error ? (
           <Alert kind={kinds.DANGER}>{translate('BackupsLoadError')}</Alert>
@@ -134,6 +179,12 @@ function Backups() {
       <RestoreBackupModal
         isOpen={isRestoreModalOpen}
         onModalClose={handleRestoreModalClose}
+      />
+
+      <PostgresMigrationModal
+        isOpen={isPostgresMigrationModalOpen}
+        status={postgresMigrationStatus}
+        onModalClose={handlePostgresMigrationModalClose}
       />
     </PageContent>
   );
