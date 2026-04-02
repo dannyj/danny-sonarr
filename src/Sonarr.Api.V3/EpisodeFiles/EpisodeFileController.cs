@@ -168,12 +168,26 @@ namespace Sonarr.Api.V3.EpisodeFiles
         [Consumes("application/json")]
         public object DeleteEpisodeFiles([FromBody] EpisodeFileListResource resource)
         {
-            var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
-            var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
-
-            foreach (var episodeFile in episodeFiles)
+            if (resource.EpisodeFileIds.Count == 0)
             {
-                _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
+                return new { };
+            }
+
+            var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
+
+            if (episodeFiles.Count == 0)
+            {
+                return new { };
+            }
+
+            foreach (var seriesFiles in episodeFiles.GroupBy(e => e.SeriesId))
+            {
+                var series = _seriesService.GetSeries(seriesFiles.Key);
+
+                foreach (var episodeFile in seriesFiles)
+                {
+                    _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
+                }
             }
 
             return new { };
