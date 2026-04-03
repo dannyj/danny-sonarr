@@ -325,11 +325,14 @@ function InteractiveImportModalContentInner(
   }, [showSeries, items]);
 
   const selectedIds = useSelectedIds();
+  const selectedIdSet = useMemo(() => {
+    return new Set(selectedIds.map((id) => id.toString()));
+  }, [selectedIds]);
 
   const bulkSelectOptions = useMemo(() => {
     const { seasonSelectDisabled, episodeSelectDisabled } = items.reduce(
       (acc, item) => {
-        if (!selectedIds.includes(item.id)) {
+        if (!selectedIdSet.has(item.id.toString())) {
           return acc;
         }
 
@@ -396,7 +399,7 @@ function InteractiveImportModalContentInner(
     }
 
     return options;
-  }, [allowSeriesChange, items, selectedIds]);
+  }, [allowSeriesChange, items, selectedIdSet]);
 
   useEffect(
     () => {
@@ -471,15 +474,20 @@ function InteractiveImportModalContentInner(
     setIsConfirmDeleteModalOpen(false);
 
     const episodeFileIds = items.reduce((acc: number[], item) => {
-      if (selectedIds.indexOf(item.id) > -1 && item.episodeFileId) {
+      if (selectedIdSet.has(item.id.toString()) && item.episodeFileId) {
         acc.push(item.episodeFileId);
       }
 
       return acc;
     }, []);
 
+    if (episodeFileIds.length === 0) {
+      setInteractiveImportErrorMessage('No episode files were selected');
+      return;
+    }
+
     deleteEpisodeFiles({ episodeFileIds });
-  }, [items, selectedIds, setIsConfirmDeleteModalOpen, deleteEpisodeFiles]);
+  }, [items, selectedIdSet, setIsConfirmDeleteModalOpen, deleteEpisodeFiles]);
 
   const handleConfirmDeleteModalClose = useCallback(() => {
     setIsConfirmDeleteModalOpen(false);
@@ -504,7 +512,7 @@ function InteractiveImportModalContentInner(
     let hasDuplicateEpisodes = false;
 
     items.forEach((item) => {
-      const isSelected = selectedIds.indexOf(item.id) > -1;
+      const isSelected = selectedIdSet.has(item.id.toString());
 
       if (isSelected) {
         const {
@@ -639,7 +647,7 @@ function InteractiveImportModalContentInner(
     importMode,
     items,
     originalItems,
-    selectedIds,
+    selectedIdSet,
     onModalClose,
     executeCommand,
     updateEpisodeFiles,
@@ -835,16 +843,18 @@ function InteractiveImportModalContentInner(
     ]
   );
 
-  const orderedSelectedIds = items.reduce((acc: number[], file) => {
-    if (selectedIds.includes(file.id)) {
-      acc.push(file.id);
-    }
+  const orderedSelectedIds = useMemo(() => {
+    return items.reduce((acc: number[], file) => {
+      if (selectedIdSet.has(file.id.toString())) {
+        acc.push(file.id);
+      }
 
-    return acc;
-  }, []);
+      return acc;
+    }, []);
+  }, [items, selectedIdSet]);
 
   const selectedItem = selectedIds.length
-    ? items.find((file) => file.id === selectedIds[0])
+    ? items.find((file) => file.id.toString() === selectedIds[0].toString())
     : null;
 
   const errorMessage = getErrorMessage(
