@@ -474,9 +474,30 @@ function InteractiveImportModalContentInner(
     setIsConfirmDeleteModalOpen(false);
 
     const episodeFileIds = items.reduce((acc: number[], item) => {
-      if (selectedIdSet.has(item.id.toString()) && item.episodeFileId) {
-        acc.push(item.episodeFileId);
+      if (!selectedIdSet.has(item.id.toString())) {
+        return acc;
       }
+
+      if (item.episodeFileId != null) {
+        acc.push(item.episodeFileId);
+        return acc;
+      }
+
+      const fallbackEpisodeFileIds = item.episodes.reduce(
+        (ids: number[], episode) => {
+          if (
+            episode.episodeFileId > 0 &&
+            !ids.includes(episode.episodeFileId)
+          ) {
+            ids.push(episode.episodeFileId);
+          }
+
+          return ids;
+        },
+        []
+      );
+
+      acc.push(...fallbackEpisodeFileIds);
 
       return acc;
     }, []);

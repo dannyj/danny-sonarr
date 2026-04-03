@@ -107,6 +107,9 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
   const { useIsSelected } = useSelect<InteractiveImport>();
   const isSelected = useIsSelected(id);
   const { updateInteractiveImportItem } = useUpdateInteractiveImportItem();
+  const hasEpisodeFileId =
+    episodeFileId != null ||
+    episodes.some((episode) => episode.episodeFileId > 0);
 
   const isSeriesColumnVisible = useMemo(
     () => columns.find((c) => c.name === 'series')?.isVisible ?? false,
@@ -134,7 +137,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
       ) {
         onSelectedChange({
           id,
-          hasEpisodeFileId: !!episodeFileId,
+          hasEpisodeFileId,
           value: true,
           shiftKey: false,
         });
@@ -173,22 +176,22 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
     (result: SelectStateInputProps) => {
       onSelectedChange({
         ...result,
-        hasEpisodeFileId: !!episodeFileId,
+        hasEpisodeFileId,
       });
     },
-    [episodeFileId, onSelectedChange]
+    [hasEpisodeFileId, onSelectedChange]
   );
 
   const selectRowAfterChange = useCallback(() => {
     if (!isSelected) {
       onSelectedChange({
         id,
-        hasEpisodeFileId: !!episodeFileId,
+        hasEpisodeFileId,
         value: true,
         shiftKey: false,
       });
     }
-  }, [id, episodeFileId, isSelected, onSelectedChange]);
+  }, [id, hasEpisodeFileId, isSelected, onSelectedChange]);
 
   const onSelectModalClose = useCallback(() => {
     setSelectModalOpen(null);
