@@ -129,14 +129,14 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
     {
         if (resource.EpisodeFileIds.Count == 0)
         {
-            return NoContent();
+            throw new BadRequestException("episodeFileIds must be provided");
         }
 
         var episodeFiles = _mediaFileService.GetFiles(resource.EpisodeFileIds);
 
         if (episodeFiles.Count == 0)
         {
-            return NoContent();
+            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Episode files not found");
         }
 
         foreach (var seriesFiles in episodeFiles.GroupBy(e => e.SeriesId))
