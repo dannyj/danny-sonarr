@@ -9,7 +9,6 @@ using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFilters;
 using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Dashboard;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.Download;
