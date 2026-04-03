@@ -114,12 +114,6 @@ namespace NzbDrone.Core.Jobs
                     new ScheduledTask
                     {
                         Interval = 24 * 60,
-                        TypeName = typeof(CaptureDashboardSnapshotCommand).FullName
-                    },
-
-                    new ScheduledTask
-                    {
-                        Interval = 24 * 60,
                         TypeName = typeof(HousekeepingCommand).FullName
                     },
 

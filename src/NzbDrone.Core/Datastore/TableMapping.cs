@@ -171,8 +171,6 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<PlexProcessedWatchEvent>("PlexProcessedWatchEvents").RegisterModel();
             Mapper.Entity<PlexWatchTriggeredSearchState>("PlexWatchTriggeredSearchState").RegisterModel();
             Mapper.Entity<PlexWatchStatsSyncState>("PlexWatchStatsSyncState").RegisterModel();
-            Mapper.Entity<DashboardSnapshot>("DashboardSnapshots").RegisterModel();
-
             Mapper.Entity<CustomFilter>("CustomFilters").RegisterModel();
 
             Mapper.Entity<DownloadHistory>("DownloadHistory").RegisterModel();

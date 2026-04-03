@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Dashboard;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.SeriesStats;
@@ -22,18 +21,15 @@ namespace Sonarr.Api.V3.Dashboard
         private readonly ISeriesService _seriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
         private readonly IMediaFileRepository _mediaFileRepository;
-        private readonly IDashboardSnapshotService _dashboardSnapshotService;
 
         public DashboardController(
             ISeriesService seriesService,
             ISeriesStatisticsService seriesStatisticsService,
-            IMediaFileRepository mediaFileRepository,
-            IDashboardSnapshotService dashboardSnapshotService)
+            IMediaFileRepository mediaFileRepository)
         {
             _seriesService = seriesService;
             _seriesStatisticsService = seriesStatisticsService;
             _mediaFileRepository = mediaFileRepository;
-            _dashboardSnapshotService = dashboardSnapshotService;
         }
 
         [HttpGet]
@@ -49,7 +45,6 @@ namespace Sonarr.Api.V3.Dashboard
             var statistics = _seriesStatisticsService.SeriesStatistics()
                 .ToDictionary(x => x.SeriesId);
             var episodeFiles = _mediaFileRepository.All().ToList();
-            var snapshots = _dashboardSnapshotService.GetSnapshots();
 
             var totals = BuildTotals(series, statistics, episodeFiles, next7Days, next30Days);
 
@@ -57,7 +52,7 @@ namespace Sonarr.Api.V3.Dashboard
             {
                 Totals = totals,
                 Watch = BuildWatchSummary(statistics),
-                Growth = BuildGrowth(series, statistics, snapshots),
+                Growth = BuildGrowth(series, statistics),
                 Networks = BuildNetworkBreakdown(series, statistics),
                 Qualities = BuildQualityBreakdown(episodeFiles),
                 PopularSeries = BuildPopularSeries(series, statistics),
@@ -114,21 +109,8 @@ namespace Sonarr.Api.V3.Dashboard
 
         private static List<DashboardGrowthPointResource> BuildGrowth(
             List<NzbDrone.Core.Tv.Series> series,
-            Dictionary<int, SeriesStatistics> statistics,
-            List<DashboardSnapshot> snapshots)
+            Dictionary<int, SeriesStatistics> statistics)
         {
-            if (snapshots.Count >= 2)
-            {
-                return snapshots
-                    .Select(snapshot => new DashboardGrowthPointResource
-                    {
-                        Date = snapshot.SnapshotDate,
-                        SeriesCount = snapshot.SeriesCount,
-                        TotalEpisodeCount = snapshot.TotalEpisodeCount
-                    })
-                    .ToList();
-            }
-
             var monthlyChanges = series
                 .Where(s => s.Added != default)
                 .Select(s =>
