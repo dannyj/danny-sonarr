@@ -106,10 +106,9 @@ jobs:
           PR_CREATION_TOKEN: ${{ secrets.PR_CREATION_TOKEN }}
         shell: bash
         run: |
-          if [ -n "${PR_CREATION_TOKEN}" ]; then
-            export GH_TOKEN="${PR_CREATION_TOKEN}"
-          else
-            export GH_TOKEN="${DEFAULT_GH_TOKEN}"
+          export GH_TOKEN="${DEFAULT_GH_TOKEN}"
+
+          if [ -z "${PR_CREATION_TOKEN}" ]; then
             echo "PR_CREATION_TOKEN is not set; falling back to github.token." >> "$GITHUB_STEP_SUMMARY"
           fi
 
@@ -126,6 +125,10 @@ jobs:
           if [ -n "${pr_url}" ] && [ "${pr_url}" != "null" ]; then
             gh pr edit "${pr_url}" --title "${title}" --body "${body}"
           else
+            if [ -n "${PR_CREATION_TOKEN}" ]; then
+              export GH_TOKEN="${PR_CREATION_TOKEN}"
+            fi
+
             if gh pr create \
               --base "${TARGET_BRANCH}" \
               --head "${SYNC_BRANCH}" \
@@ -133,6 +136,7 @@ jobs:
               --body "${body}"; then
               :
             else
+              export GH_TOKEN="${DEFAULT_GH_TOKEN}"
               pr_url=$(gh pr list \
                 --base "${TARGET_BRANCH}" \
                 --head "${SYNC_BRANCH}" \
