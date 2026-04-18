@@ -126,9 +126,25 @@ jobs:
           if [ -n "${pr_url}" ] && [ "${pr_url}" != "null" ]; then
             gh pr edit "${pr_url}" --title "${title}" --body "${body}"
           else
-            gh pr create \
+            if gh pr create \
               --base "${TARGET_BRANCH}" \
               --head "${SYNC_BRANCH}" \
               --title "${title}" \
-              --body "${body}"
+              --body "${body}"; then
+              :
+            else
+              pr_url=$(gh pr list \
+                --base "${TARGET_BRANCH}" \
+                --head "${SYNC_BRANCH}" \
+                --state open \
+                --json url \
+                --jq '.[0].url')
+
+              if [ -n "${pr_url}" ] && [ "${pr_url}" != "null" ]; then
+                echo "Pull request already exists; updating existing PR metadata." >> "$GITHUB_STEP_SUMMARY"
+                gh pr edit "${pr_url}" --title "${title}" --body "${body}"
+              else
+                exit 1
+              fi
+            fi
           fi
