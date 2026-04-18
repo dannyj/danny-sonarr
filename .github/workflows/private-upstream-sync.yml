@@ -112,18 +112,20 @@ jobs:
             echo "PR_CREATION_TOKEN is not set; falling back to github.token." >> "$GITHUB_STEP_SUMMARY"
           fi
 
-          pr_url=$(gh pr list \
-            --base "${TARGET_BRANCH}" \
-            --head "${SYNC_BRANCH}" \
-            --state open \
-            --json url \
-            --jq '.[0].url')
+          pr_number=$(gh api \
+            "repos/${GITHUB_REPOSITORY}/pulls?state=open&base=${TARGET_BRANCH}&head=${GITHUB_REPOSITORY_OWNER}:${SYNC_BRANCH}" \
+            --jq '.[0].number')
 
           title="chore: merge upstream/${UPSTREAM_BRANCH} into ${TARGET_BRANCH}"
           body="Automated upstream sync from \`${UPSTREAM_REPOSITORY}:${UPSTREAM_BRANCH}\` into \`${TARGET_BRANCH}\`."
 
-          if [ -n "${pr_url}" ] && [ "${pr_url}" != "null" ]; then
-            gh pr edit "${pr_url}" --title "${title}" --body "${body}"
+          if [ -n "${pr_number}" ] && [ "${pr_number}" != "null" ]; then
+            gh api \
+              --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/pulls/${pr_number}" \
+              -f title="${title}" \
+              -f body="${body}" \
+              >/dev/null
           else
             if [ -n "${PR_CREATION_TOKEN}" ]; then
               export GH_TOKEN="${PR_CREATION_TOKEN}"
@@ -137,16 +139,18 @@ jobs:
               :
             else
               export GH_TOKEN="${DEFAULT_GH_TOKEN}"
-              pr_url=$(gh pr list \
-                --base "${TARGET_BRANCH}" \
-                --head "${SYNC_BRANCH}" \
-                --state open \
-                --json url \
-                --jq '.[0].url')
+              pr_number=$(gh api \
+                "repos/${GITHUB_REPOSITORY}/pulls?state=open&base=${TARGET_BRANCH}&head=${GITHUB_REPOSITORY_OWNER}:${SYNC_BRANCH}" \
+                --jq '.[0].number')
 
-              if [ -n "${pr_url}" ] && [ "${pr_url}" != "null" ]; then
+              if [ -n "${pr_number}" ] && [ "${pr_number}" != "null" ]; then
                 echo "Pull request already exists; updating existing PR metadata." >> "$GITHUB_STEP_SUMMARY"
-                gh pr edit "${pr_url}" --title "${title}" --body "${body}"
+                gh api \
+                  --method PATCH \
+                  "repos/${GITHUB_REPOSITORY}/pulls/${pr_number}" \
+                  -f title="${title}" \
+                  -f body="${body}" \
+                  >/dev/null
               else
                 exit 1
               fi
