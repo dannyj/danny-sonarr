@@ -284,6 +284,7 @@ namespace NzbDrone.Host
                               IStartupContext startupContext,
                               Lazy<IMainDatabase> mainDatabaseFactory,
                               Lazy<ILogDatabase> logDatabaseFactory,
+                              IPostgresSequenceRepairService postgresSequenceRepairService,
                               DatabaseTarget dbTarget,
                               ISingleInstancePolicy singleInstancePolicy,
                               InitializeLogger initializeLogger,
@@ -307,11 +308,13 @@ namespace NzbDrone.Host
             EnsureSingleInstance(false, startupContext, singleInstancePolicy);
 
             // instantiate the databases to initialize/migrate them
-            _ = mainDatabaseFactory.Value;
+            var mainDatabase = mainDatabaseFactory.Value;
+            postgresSequenceRepairService.RepairIfNeeded(mainDatabase, "main");
 
             if (configFileProvider.LogDbEnabled)
             {
-                _ = logDatabaseFactory.Value;
+                var logDatabase = logDatabaseFactory.Value;
+                postgresSequenceRepairService.RepairIfNeeded(logDatabase, "log");
                 dbTarget.Register();
             }
 
