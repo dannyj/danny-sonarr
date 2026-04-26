@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Dapper;
 using NLog;
+using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -9,13 +11,25 @@ namespace NzbDrone.Core.Datastore
         void RepairIfNeeded(IDatabase database, string databaseName);
     }
 
-    public class PostgresSequenceRepairService : IPostgresSequenceRepairService
+    public class PostgresSequenceRepairService : IPostgresSequenceRepairService, IHandle<ApplicationStartedEvent>
     {
+        private readonly IMainDatabase _mainDatabase;
+        private readonly ILogDatabase _logDatabase;
         private readonly Logger _logger;
 
-        public PostgresSequenceRepairService(Logger logger)
+        public PostgresSequenceRepairService(IMainDatabase mainDatabase,
+                                             ILogDatabase logDatabase,
+                                             Logger logger)
         {
+            _mainDatabase = mainDatabase;
+            _logDatabase = logDatabase;
             _logger = logger;
+        }
+
+        public void Handle(ApplicationStartedEvent message)
+        {
+            RepairIfNeeded(_mainDatabase, "main");
+            RepairIfNeeded(_logDatabase, "log");
         }
 
         public void RepairIfNeeded(IDatabase database, string databaseName)
@@ -32,7 +46,8 @@ namespace NzbDrone.Core.Datastore
                          c.column_name AS ColumnName,
                          pg_get_serial_sequence(format('%I.%I', c.table_schema, c.table_name), c.column_name) AS SequenceName
                   FROM information_schema.columns c
-                  WHERE c.table_schema = 'public' AND c.column_default LIKE 'nextval(%'");
+                  WHERE c.table_schema = 'public'
+                    AND (c.column_default LIKE 'nextval(%' OR c.is_identity = 'YES')");
 
             var repairedSequences = new List<string>();
 

@@ -78,11 +78,11 @@ export default function QualityProfileItemSize({
         qualityId: id,
         minSize: roundNumber(Math.pow(sliderMinSize, 1.1)),
         preferredSize:
-          sliderPreferredSize === MAX - MIN_DISTANCE
+          sliderPreferredSize === SLIDER_MAX - MIN_DISTANCE
             ? null
             : roundNumber(Math.pow(sliderPreferredSize, 1.1)),
         maxSize:
-          sliderMaxSize === MAX
+          sliderMaxSize === SLIDER_MAX
             ? null
             : roundNumber(Math.pow(sliderMaxSize, 1.1)),
       });
@@ -147,8 +147,8 @@ export default function QualityProfileItemSize({
   const handleAfterSliderChange = useCallback(() => {
     setSizes({
       minSize: getSliderValue(minSize, MIN),
-      maxSize: getSliderValue(maxSize, MAX),
-      preferredSize: getSliderValue(preferredSize, MAX - MIN_DISTANCE),
+      maxSize: getSliderValue(maxSize, SLIDER_MAX),
+      preferredSize: getSliderValue(preferredSize, SLIDER_MAX - MIN_DISTANCE),
     });
   }, [minSize, maxSize, preferredSize, setSizes]);
 

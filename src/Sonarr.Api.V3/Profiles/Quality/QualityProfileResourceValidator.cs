@@ -19,14 +19,14 @@ public class QualityProfileQualityItemResourceValidator : AbstractValidator<Qual
         RuleFor(c => c.MinSize)
             .GreaterThanOrEqualTo(QualityDefinitionLimits.Min)
             .WithErrorCode("GreaterThanOrEqualTo")
-            .LessThanOrEqualTo(c => c.MinSize ?? QualityDefinitionLimits.Max)
+            .LessThanOrEqualTo(c => c.PreferredSize ?? QualityDefinitionLimits.Max)
             .WithErrorCode("LessThanOrEqualTo")
             .When(c => c.MinSize is not null);
 
         RuleFor(c => c.PreferredSize)
             .GreaterThanOrEqualTo(c => c.MinSize ?? QualityDefinitionLimits.Min)
             .WithErrorCode("GreaterThanOrEqualTo")
-            .LessThanOrEqualTo(c => c.MaxSize ?? QualityDefinitionLimits.Max)
+            .LessThanOrEqualTo(c => GetMaxSizeLimit(c) ?? QualityDefinitionLimits.Max)
             .WithErrorCode("LessThanOrEqualTo")
             .When(c => c.PreferredSize is not null);
 
@@ -35,6 +35,11 @@ public class QualityProfileQualityItemResourceValidator : AbstractValidator<Qual
             .WithErrorCode("GreaterThanOrEqualTo")
             .LessThanOrEqualTo(QualityDefinitionLimits.Max)
             .WithErrorCode("LessThanOrEqualTo")
-            .When(c => c.MaxSize is not null);
+            .When(c => c.MaxSize is > 0);
+    }
+
+    private static double? GetMaxSizeLimit(QualityProfileQualityItemResource item)
+    {
+        return item.MaxSize is > 0 ? item.MaxSize : null;
     }
 }

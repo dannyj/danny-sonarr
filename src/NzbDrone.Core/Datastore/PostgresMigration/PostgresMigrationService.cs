@@ -413,7 +413,8 @@ namespace NzbDrone.Core.Datastore.PostgresMigration
                          c.column_name AS ColumnName,
                          pg_get_serial_sequence(format('%I.%I', c.table_schema, c.table_name), c.column_name) AS SequenceName
                   FROM information_schema.columns c
-                  WHERE c.table_schema = 'public' AND c.column_default LIKE 'nextval(%'");
+                  WHERE c.table_schema = 'public'
+                    AND (c.column_default LIKE 'nextval(%' OR c.is_identity = 'YES')");
 
             foreach (var sequence in sequences.Where(x => x.SequenceName.IsNotNullOrWhiteSpace()))
             {
