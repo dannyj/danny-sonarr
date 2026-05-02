@@ -1,21 +1,28 @@
 .item {
   border-left: 3px solid transparent;
-  color: var(--sidebarColor);
-  transition: border-left 0.3s ease-in-out;
+  transition: border-color 0.2s ease;
 }
 
 .isActiveItem {
-  border-left: 3px solid var(--themeAlternateBlue);
+  border-left-color: var(--primaryColor);
 }
 
 .link {
-  display: block;
-  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  padding: 11px 20px;
+  background-color: transparent;
   color: var(--sidebarColor);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  font-size: $defaultFontSize;
+  transition: color 0.15s ease, background-color 0.15s ease;
 
   &:hover,
   &:focus {
-    color: var(--themeBlue);
+    background-color: rgba(255, 255, 255, 0.04);
+    color: var(--white);
     text-decoration: none;
   }
 }
@@ -23,25 +30,59 @@
 .childLink {
   composes: link;
 
-  padding: 10px 24px;
-  padding-left: 35px;
+  padding: 8px 20px 8px 44px;
+  color: var(--helpTextColor);
+  letter-spacing: 0.02em;
+  font-size: $smallFontSize;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--sidebarColor);
+  }
 }
 
 .isActiveLink {
-  color: var(--themeAlternateBlue);
+  color: var(--primaryColor);
+
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 212, 255, 0.06);
+    color: var(--primaryColor);
+  }
 }
 
 .isActiveParentLink {
-  background-color: var(--sidebarActiveBackgroundColor);
+  background-color: rgba(0, 212, 255, 0.05);
+  color: var(--white);
+
+  &:hover,
+  &:focus {
+    background-color: rgba(0, 212, 255, 0.08);
+  }
 }
 
 .iconContainer {
-  display: inline-block;
-  margin-right: 7px;
-  width: 18px;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  width: 16px;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+
+  .link:hover & {
+    opacity: 1;
+  }
+
+  .isActiveParentLink & {
+    color: var(--primaryColor);
+    opacity: 1;
+  }
 }
 
 .status {
-  float: right;
+  margin-left: auto;
+  padding-left: 8px;
 }

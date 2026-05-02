@@ -1,49 +1,55 @@
 .wrapper {
   display: flex;
   align-items: center;
+  flex-grow: 1;
+  padding: 0 16px;
 }
 
 .loading {
   position: absolute;
   display: inline-block;
-  margin-left: 5px;
+  margin-left: 8px;
 }
 
 .ripple {
   composes: ripple from '~Components/Loading/LoadingIndicator.css';
 
-  border: 1px solid var(--toolbarColor);
-}
-
-.input {
-  margin-left: 8px;
-  width: 200px;
-  border: none;
-  border-bottom: solid 1px var(--white);
-  border-radius: 0;
-  background-color: transparent;
-  box-shadow: none;
-  color: var(--white);
-  transition: border 0.3s ease-out;
-
-  &::placeholder {
-    color: var(--white);
-    transition: color 0.3s ease-out;
-  }
-
-  &:focus {
-    outline: 0;
-    border-bottom-color: transparent;
-
-    &::placeholder {
-      color: transparent;
-    }
-  }
+  border: 1px solid rgba(0, 212, 255, 0.4);
 }
 
 .container {
   position: relative;
   flex-grow: 1;
+  max-width: 480px;
+}
+
+.input {
+  padding: 7px 14px;
+  width: 100%;
+  border: 1px solid var(--borderColor);
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.04);
+  box-shadow: none;
+  color: var(--white);
+  font-size: $defaultFontSize;
+  font-family: $defaultFontFamily;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder {
+    color: var(--helpTextColor);
+    transition: color 0.2s ease;
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: var(--primaryColor);
+    background-color: rgba(0, 212, 255, 0.04);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
+
+    &::placeholder {
+      color: transparent;
+    }
+  }
 }
 
 .seriesContainer {
@@ -55,54 +61,60 @@
 .containerOpen {
   .seriesContainer {
     position: absolute;
-    top: 42px;
+    top: calc(100% + 6px);
+    left: 0;
     z-index: 11;
     overflow-y: auto;
     min-width: 100%;
-    max-height: 230px;
-    border: 1px solid var(--themeDarkColor);
-    border-radius: 4px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    max-height: 280px;
+    border: 1px solid var(--borderColor);
+    border-radius: 8px;
     background-color: var(--themeDarkColor);
-    box-shadow: inset 0 1px 1px var(--inputBoxShadowColor);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 212, 255, 0.08);
     color: var(--menuItemColor);
   }
 }
 
 .list {
-  margin: 5px 0;
+  margin: 6px 0;
   padding-left: 0;
   list-style-type: none;
 }
 
 .listItem {
-  padding: 0 16px;
+  padding: 0 12px;
   white-space: nowrap;
 }
 
 .highlighted {
-  background-color: var(--themeLightColor);
+  border-radius: 4px;
+  background-color: rgba(0, 212, 255, 0.08);
 }
 
 .sectionTitle {
-  padding: 5px 8px;
-  color: var(--disabledColor);
+  padding: 6px 12px 4px;
+  color: var(--helpTextColor);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  font-size: $smallFontSize;
 }
 
 .addNewSeriesSuggestion {
-  padding: 5px 3px;
+  padding: 6px 4px;
   cursor: pointer;
 }
 
 @media only screen and (max-width: $breakpointSmall) {
-  .input {
-    min-width: 150px;
-    max-width: 200px;
+  .wrapper {
+    padding: 0 8px;
   }
 
   .container {
-    min-width: 0;
-    max-width: 200px;
+    max-width: 100%;
+  }
+
+  .input {
+    min-width: 120px;
   }
 }
