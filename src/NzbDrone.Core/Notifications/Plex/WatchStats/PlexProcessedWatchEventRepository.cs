@@ -27,19 +27,26 @@ namespace NzbDrone.Core.Notifications.Plex.WatchStats
                 return new HashSet<string>();
             }
 
-            var sql = _database.DatabaseType == DatabaseType.PostgreSQL
-                ? @"SELECT ""EventKey""
-                    FROM ""PlexProcessedWatchEvents""
-                    WHERE ""PlexServerDefinitionId"" = @plexServerDefinitionId
-                      AND ""EventKey"" = ANY(@keys)"
-                : @"SELECT ""EventKey""
-                    FROM ""PlexProcessedWatchEvents""
-                    WHERE ""PlexServerDefinitionId"" = @plexServerDefinitionId
-                      AND ""EventKey"" IN @keys";
-
             using (var conn = _database.OpenConnection())
             {
-                return conn.Query<string>(sql, new { plexServerDefinitionId, keys }).ToHashSet();
+                if (_database.DatabaseType == DatabaseType.PostgreSQL)
+                {
+                    const string sql = @"SELECT ""EventKey""
+                                         FROM ""PlexProcessedWatchEvents""
+                                         WHERE ""PlexServerDefinitionId"" = @plexServerDefinitionId
+                                           AND ""EventKey"" = ANY(@keys)";
+
+                    return conn.Query<string>(sql, new { plexServerDefinitionId, keys = keys.ToArray() }).ToHashSet();
+                }
+                else
+                {
+                    const string sql = @"SELECT ""EventKey""
+                                         FROM ""PlexProcessedWatchEvents""
+                                         WHERE ""PlexServerDefinitionId"" = @plexServerDefinitionId
+                                           AND ""EventKey"" IN @keys";
+
+                    return conn.Query<string>(sql, new { plexServerDefinitionId, keys }).ToHashSet();
+                }
             }
         }
     }
