@@ -46,7 +46,6 @@ namespace NzbDrone.Core.Download
                     var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
 
                     downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
-                    trackedDownload.DownloadItem.Removed = true;
                     removedDownloadIds.Add(trackedDownload.DownloadItem.DownloadId);
                 }
                 catch (System.Exception e)
