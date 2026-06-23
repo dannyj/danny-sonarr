@@ -159,6 +159,8 @@ data/config/logs/
 data/config/*.db
 data/config/*.db-shm
 data/config/*.db-wal
+data/config/*.pid
+data/config/asp/
 data/config/MediaCover/
 data/config/Sentry/
 
