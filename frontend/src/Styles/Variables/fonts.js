@@ -1,7 +1,8 @@
 module.exports = {
   // Families
-  defaultFontFamily: 'Roboto, "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
-  monoSpaceFontFamily: '"Ubuntu Mono", Menlo, Monaco, Consolas, "Courier New", monospace;',
+  defaultFontFamily: '"IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
+  headingFontFamily: '"Barlow Condensed", "IBM Plex Sans", sans-serif',
+  monoSpaceFontFamily: '"JetBrains Mono", "Ubuntu Mono", Menlo, Monaco, Consolas, "Courier New", monospace',
 
   // Sizes
   extraSmallFontSize: '11px',

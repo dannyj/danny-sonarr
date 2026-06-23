@@ -1,244 +1,242 @@
+// Cinema Dark — deep blue-black, electric neon blue accents
 const sonarrBlue = '#35c5f4';
-const darkGray = '#888';
-const mediumGray = '#999';
-const gray = '#adadad';
+const neonBlue = '#00d4ff';
 const black = '#000';
 const white = '#fff';
-const offWhite = '#f5f7fa';
+const offWhite = '#e2eaf5';
 const purple = '#7a43b6';
 const pink = '#ff69b4';
-const lightGray = '#ddd';
 
 module.exports = {
-  textColor: '#ccc',
-  defaultColor: '#ccc',
-  disabledColor: '#999',
-  dimColor: '#555',
+  textColor: '#e2eaf5',
+  defaultColor: '#c8d6e8',
+  disabledColor: '#3d5270',
+  dimColor: '#2a3a52',
   black,
   white,
   offWhite,
-  primaryColor: '#5d9cec',
+  primaryColor: neonBlue,
   selectedColor: '#f9be03',
-  successColor: '#00853d',
-  dangerColor: '#f05050',
-  warningColor: '#ffa500',
-  infoColor: '#5d9cec',
+  successColor: '#00c07a',
+  dangerColor: '#ff4757',
+  warningColor: '#ffb300',
+  infoColor: neonBlue,
   purple,
   pink,
   sonarrBlue,
-  helpTextColor: '#909293',
-  darkGray,
-  gray,
-  lightGray,
-  mediumGray,
+  helpTextColor: '#5a7190',
+  darkGray: '#1a2640',
+  gray: '#2a3a52',
+  lightGray: '#3d5270',
+  mediumGray: '#2f4060',
 
   // Theme Colors
 
   themeBlue: sonarrBlue,
-  themeAlternateBlue: '#2193b5',
+  themeAlternateBlue: '#0ea5c9',
   themeRed: '#c4273c',
-  themeDarkColor: '#494949',
-  themeLightColor: '#595959',
-  pageBackground: '#202020',
-  pageFooterBackground: 'rgba(0, 0, 0, .25)',
+  themeDarkColor: '#0d1421',
+  themeLightColor: '#111927',
+  pageBackground: '#07090f',
+  pageFooterBackground: 'rgba(0, 0, 0, .4)',
 
-  torrentColor: '#00853d',
-  usenetColor: '#17b1d9',
+  torrentColor: '#00c07a',
+  usenetColor: '#00d4ff',
 
   // Labels
-  inverseLabelColor: '#ddd',
-  inverseLabelTextColor: '#333',
-  disabledLabelColor: '#838383',
+  inverseLabelColor: '#e2eaf5',
+  inverseLabelTextColor: '#07090f',
+  disabledLabelColor: '#2a3a52',
   infoTextColor: white,
 
   // Links
-  defaultLinkHoverColor: '#fff',
-  linkColor: '#5d9cec',
-  linkHoverColor: '#1b72e2',
+  defaultLinkHoverColor: neonBlue,
+  linkColor: neonBlue,
+  linkHoverColor: '#35c5f4',
 
   // Header
-  pageHeaderBackgroundColor: '#2a2a2a',
+  pageHeaderBackgroundColor: '#0a0e18',
 
   // Sidebar
-
-  sidebarColor: '#e1e2e3',
-  sidebarBackgroundColor: '#2a2a2a',
-  sidebarActiveBackgroundColor: '#333333',
+  sidebarColor: '#c8d6e8',
+  sidebarBackgroundColor: '#080c14',
+  sidebarActiveBackgroundColor: '#0d1828',
 
   // Toolbar
-  toolbarColor: '#e1e2e3',
-  toolbarBackgroundColor: '#262626',
-  toolbarMenuItemBackgroundColor: '#333',
-  toolbarMenuItemHoverBackgroundColor: '#414141',
-  toolbarLabelColor: '#e1e2e3',
+  toolbarColor: '#c8d6e8',
+  toolbarBackgroundColor: '#090d17',
+  toolbarMenuItemBackgroundColor: '#0d1421',
+  toolbarMenuItemHoverBackgroundColor: '#111927',
+  toolbarLabelColor: '#c8d6e8',
 
   // Accents
-  borderColor: '#858585',
-  inputBorderColor: '#dde6e9',
-  inputBoxShadowColor: 'rgba(0, 0, 0, 0.075)',
-  inputFocusBorderColor: '#66afe9',
-  inputFocusBoxShadowColor: 'rgba(102, 175, 233, 0.6)',
-  inputErrorBorderColor: '#f05050',
-  inputErrorBoxShadowColor: 'rgba(240, 80, 80, 0.6)',
-  inputWarningBorderColor: '#ffa500',
-  inputWarningBoxShadowColor: 'rgba(255, 165, 0, 0.6)',
-  colorImpairedGradient: '#707070',
-  colorImpairedGradientDark: '#424242',
-  colorImpairedDangerGradient: '#d84848',
-  colorImpairedWarningGradient: '#e59400',
-  colorImpairedPrimaryGradient: '#538cd4',
-  colorImpairedGrayGradient: '#9b9b9b',
+  borderColor: '#1a2640',
+  inputBorderColor: '#1e2e48',
+  inputBoxShadowColor: 'rgba(0, 0, 0, 0.3)',
+  inputFocusBorderColor: neonBlue,
+  inputFocusBoxShadowColor: 'rgba(0, 212, 255, 0.15)',
+  inputErrorBorderColor: '#ff4757',
+  inputErrorBoxShadowColor: 'rgba(255, 71, 87, 0.25)',
+  inputWarningBorderColor: '#ffb300',
+  inputWarningBoxShadowColor: 'rgba(255, 179, 0, 0.25)',
+  colorImpairedGradient: '#2a3a52',
+  colorImpairedGradientDark: '#1a2640',
+  colorImpairedDangerGradient: '#c0394a',
+  colorImpairedWarningGradient: '#cc9000',
+  colorImpairedPrimaryGradient: '#0ea5c9',
+  colorImpairedGrayGradient: '#3d5270',
 
   //
   // Buttons
 
-  defaultButtonTextColor: '#eee',
-  defaultBackgroundColor: '#333',
-  defaultBorderColor: '#393f45',
-  defaultHoverBackgroundColor: '#444',
-  defaultHoverBorderColor: '#5a6265',
+  defaultButtonTextColor: '#c8d6e8',
+  defaultBackgroundColor: '#0d1421',
+  defaultBorderColor: '#1a2640',
+  defaultHoverBackgroundColor: '#111927',
+  defaultHoverBorderColor: '#1e2e48',
 
-  primaryBackgroundColor: '#5d9cec',
-  primaryBorderColor: '#5899eb',
-  primaryHoverBackgroundColor: '#4b91ea',
-  primaryHoverBorderColor: '#3483e7',
+  primaryBackgroundColor: neonBlue,
+  primaryBorderColor: '#00bde0',
+  primaryHoverBackgroundColor: '#00bde0',
+  primaryHoverBorderColor: sonarrBlue,
 
-  successBackgroundColor: '#27c24c',
-  successBorderColor: '#26be4a',
-  successHoverBackgroundColor: '#24b145',
-  successHoverBorderColor: '#1f9c3d',
+  successBackgroundColor: '#00c07a',
+  successBorderColor: '#00ae6e',
+  successHoverBackgroundColor: '#00ae6e',
+  successHoverBorderColor: '#009a60',
 
-  warningBackgroundColor: '#ff902b',
-  warningBorderColor: '#ff8d26',
-  warningHoverBackgroundColor: '#ff8517',
-  warningHoverBorderColor: '#fc7800',
+  warningBackgroundColor: '#ffb300',
+  warningBorderColor: '#e8a200',
+  warningHoverBackgroundColor: '#e8a200',
+  warningHoverBorderColor: '#cc9000',
 
-  dangerBackgroundColor: '#f05050',
-  dangerBorderColor: '#f04b4b',
-  dangerHoverBackgroundColor: '#ee3d3d',
-  dangerHoverBorderColor: '#ec2626',
+  dangerBackgroundColor: '#ff4757',
+  dangerBorderColor: '#e83a4a',
+  dangerHoverBackgroundColor: '#e83a4a',
+  dangerHoverBorderColor: '#cc2d3e',
 
-  iconButtonDisabledColor: '#7a7a7a',
-  iconButtonHoverColor: '#666',
-  iconButtonHoverLightColor: '#ccc',
+  iconButtonDisabledColor: '#2a3a52',
+  iconButtonHoverColor: '#3d5270',
+  iconButtonHoverLightColor: neonBlue,
 
   //
   // Modal
 
-  modalBackdropBackgroundColor: 'rgba(0, 0, 0, 0.6)',
-  modalBackgroundColor: '#2a2a2a',
-  modalCloseButtonHoverColor: '#888',
+  modalBackdropBackgroundColor: 'rgba(0, 0, 0, 0.75)',
+  modalBackgroundColor: '#0a0e18',
+  modalCloseButtonHoverColor: neonBlue,
 
   //
   // Menu
-  menuItemColor: '#e1e2e3',
-  menuItemHoverColor: sonarrBlue,
-  menuItemHoverBackgroundColor: '#606060',
+
+  menuItemColor: '#c8d6e8',
+  menuItemHoverColor: neonBlue,
+  menuItemHoverBackgroundColor: '#0d1828',
 
   //
   // Toolbar
 
-  toobarButtonHoverColor: sonarrBlue,
-  toobarButtonSelectedColor: sonarrBlue,
+  toobarButtonHoverColor: neonBlue,
+  toobarButtonSelectedColor: neonBlue,
 
   //
   // Scroller
 
-  scrollbarBackgroundColor: '#707070',
-  scrollbarHoverBackgroundColor: '#606060',
+  scrollbarBackgroundColor: '#1a2640',
+  scrollbarHoverBackgroundColor: '#2a3a52',
 
   //
   // Card
 
-  cardBackgroundColor: '#333333',
-  cardShadowColor: '#111',
-  cardAlternateBackgroundColor: '#333333',
-  cardCenterBackgroundColor: '#2a2a2a',
+  cardBackgroundColor: '#0d1421',
+  cardShadowColor: 'rgba(0, 0, 0, 0.5)',
+  cardAlternateBackgroundColor: '#0d1421',
+  cardCenterBackgroundColor: '#0a0e18',
 
   //
   // Alert
 
-  alertDangerBorderColor: '#a94442',
-  alertDangerBackgroundColor: 'rgba(255,0,0,0.1)',
-  alertDangerColor: '#ccc',
+  alertDangerBorderColor: '#c4273c',
+  alertDangerBackgroundColor: 'rgba(255, 71, 87, 0.08)',
+  alertDangerColor: '#e2eaf5',
 
-  alertInfoBorderColor: '#31708f',
-  alertInfoBackgroundColor: 'rgba(0,0,255,0.1)',
-  alertInfoColor: '#ccc',
+  alertInfoBorderColor: '#0ea5c9',
+  alertInfoBackgroundColor: 'rgba(0, 212, 255, 0.06)',
+  alertInfoColor: '#e2eaf5',
 
-  alertSuccessBorderColor: '#3c763d',
-  alertSuccessBackgroundColor: 'rgba(0,255,0,0.1)',
-  alertSuccessColor: '#ccc',
+  alertSuccessBorderColor: '#00c07a',
+  alertSuccessBackgroundColor: 'rgba(0, 192, 122, 0.08)',
+  alertSuccessColor: '#e2eaf5',
 
-  alertWarningBorderColor: '#8a6d3b',
-  alertWarningBackgroundColor: 'rgba(255,255,0,0.1)',
-  alertWarningColor: '#ccc',
+  alertWarningBorderColor: '#ffb300',
+  alertWarningBackgroundColor: 'rgba(255, 179, 0, 0.08)',
+  alertWarningColor: '#e2eaf5',
 
   //
   // Slider
 
-  sliderAccentColor: '#5d9cec',
+  sliderAccentColor: neonBlue,
 
   //
   // Form
 
-  inputBackgroundColor: '#333',
-  inputReadOnlyBackgroundColor: '#222',
-  inputHoverBackgroundColor: 'rgba(255, 255, 255, 0.20)',
-  inputSelectedBackgroundColor: 'rgba(255, 255, 255, 0.05)',
-  advancedFormLabelColor: '#ff902b',
-  disabledCheckInputColor: '#ddd',
-  disabledInputColor: '#808080',
+  inputBackgroundColor: '#0d1421',
+  inputReadOnlyBackgroundColor: '#080c14',
+  inputHoverBackgroundColor: 'rgba(0, 212, 255, 0.05)',
+  inputSelectedBackgroundColor: 'rgba(0, 212, 255, 0.08)',
+  advancedFormLabelColor: '#ffb300',
+  disabledCheckInputColor: '#3d5270',
+  disabledInputColor: '#2a3a52',
 
   //
   // Popover
 
-  popoverTitleBackgroundColor: '#424242',
-  popoverTitleBorderColor: '#2a2a2a',
-  popoverBodyBackgroundColor: '#2a2a2a',
-  popoverShadowColor: 'rgba(0, 0, 0, 0.2)',
-  popoverArrowBorderColor: '#2a2a2a',
+  popoverTitleBackgroundColor: '#0d1421',
+  popoverTitleBorderColor: '#1a2640',
+  popoverBodyBackgroundColor: '#0a0e18',
+  popoverShadowColor: 'rgba(0, 0, 0, 0.5)',
+  popoverArrowBorderColor: '#0a0e18',
 
-  popoverTitleBackgroundInverseColor: '#595959',
-  popoverTitleBorderInverseColor: '#707070',
-  popoverShadowInverseColor: 'rgba(0, 0, 0, 0.2)',
-  popoverArrowBorderInverseColor: 'rgba(58, 63, 81, 0.75)',
+  popoverTitleBackgroundInverseColor: '#111927',
+  popoverTitleBorderInverseColor: '#1a2640',
+  popoverShadowInverseColor: 'rgba(0, 0, 0, 0.5)',
+  popoverArrowBorderInverseColor: 'rgba(13, 20, 33, 0.9)',
 
   //
   // Calendar
 
-  calendarTodayBackgroundColor: '#3e3e3e',
-  calendarBackgroundColor: '#2a2a2a',
-  calendarBorderColor: '#393f45',
-  calendarTextDim: '#eee',
-  calendarTextDimAlternate: '#fff',
+  calendarTodayBackgroundColor: '#0d1828',
+  calendarBackgroundColor: '#0a0e18',
+  calendarBorderColor: '#1a2640',
+  calendarTextDim: '#c8d6e8',
+  calendarTextDimAlternate: '#e2eaf5',
 
   calendarFullColorFilter: 'grayscale(90%) contrast(200%) saturate(50%)',
 
   //
   // Table
 
-  tableRowHoverBackgroundColor: 'rgba(255, 255, 255, 0.08)',
+  tableRowHoverBackgroundColor: 'rgba(0, 212, 255, 0.04)',
 
   //
   // Series
 
-  addSeriesBackgroundColor: '#2a2a2a',
-  seriesBackgroundColor: '#2a2a2a',
-  searchIconContainerBackgroundColor: '#2b2b2b',
-  collapseButtonBackgroundColor: '#2a2a2a',
+  addSeriesBackgroundColor: '#0a0e18',
+  seriesBackgroundColor: '#0a0e18',
+  searchIconContainerBackgroundColor: '#080c14',
+  collapseButtonBackgroundColor: '#0a0e18',
 
   //
   // Season
 
-  seasonBackgroundColor: '#424242',
-  episodesBackgroundColor: '#2a2a2a',
+  seasonBackgroundColor: '#0d1421',
+  episodesBackgroundColor: '#0a0e18',
 
   //
   // misc
 
   progressBarFrontTextColor: white,
   progressBarBackTextColor: white,
-  progressBarBackgroundColor: '#727070',
-  logEventsBackgroundColor: '#2a2a2a'
+  progressBarBackgroundColor: '#1a2640',
+  logEventsBackgroundColor: '#0a0e18'
 };
