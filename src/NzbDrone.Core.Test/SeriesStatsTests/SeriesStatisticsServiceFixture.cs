@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
                     LastViewedAtString = DateTime.UtcNow.AddDays(-2).ToString("O")
                 });
 
-            var result = Subject.SeriesStatistics(12);
+            var result = Subject.SeriesStatistics(12, 1);
 
             result.WatchedOnPlex.Should().BeTrue();
             result.NeverWatchedOnPlex.Should().BeFalse();
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
                     SeriesId = 15
                 });
 
-            var result = Subject.SeriesStatistics(15);
+            var result = Subject.SeriesStatistics(15, 1);
 
             result.WatchedOnPlex.Should().BeFalse();
             result.NeverWatchedOnPlex.Should().BeTrue();
