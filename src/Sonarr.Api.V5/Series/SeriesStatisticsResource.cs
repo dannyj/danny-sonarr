@@ -1,4 +1,6 @@
 using NzbDrone.Core.Notifications.Plex.WatchStats;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.SeriesStats;
 
 namespace Sonarr.Api.V5.Series;
@@ -12,6 +14,8 @@ public class SeriesStatisticsResource
     public int MonitoredEpisodeCount { get; set; }
     public long SizeOnDisk { get; set; }
     public List<string>? ReleaseGroups { get; set; }
+    public List<ReleaseType>? ReleaseTypes { get; set; }
+    public List<Quality>? EpisodeFileQualities { get; set; }
     public bool WatchedOnPlex { get; set; }
     public bool NeverWatchedOnPlex { get; set; }
     public int ViewsLast30Days { get; set; }
@@ -48,6 +52,8 @@ public static class SeriesStatisticsResourceMapper
             MonitoredEpisodeCount = model.MonitoredEpisodeCount,
             SizeOnDisk = model.SizeOnDisk,
             ReleaseGroups = model.ReleaseGroups,
+            ReleaseTypes = model.ReleaseTypes,
+            EpisodeFileQualities = model.EpisodeFileQualities,
             WatchedOnPlex = model.WatchedOnPlex,
             NeverWatchedOnPlex = model.NeverWatchedOnPlex,
             ViewsLast30Days = model.ViewsLast30Days,

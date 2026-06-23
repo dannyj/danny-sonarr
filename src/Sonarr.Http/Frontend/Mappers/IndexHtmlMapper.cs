@@ -15,6 +15,7 @@ namespace Sonarr.Http.Frontend.Mappers
 {
     public class IndexHtmlMapper : HtmlMapperBase
     {
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IAnalyticsService _analyticsService;
 
@@ -24,16 +25,17 @@ namespace Sonarr.Http.Frontend.Mappers
                                IAnalyticsService analyticsService,
                                Lazy<ICacheBreakerProvider> cacheBreakProviderFactory,
                                Logger logger)
-            : base(diskProvider, cacheBreakProviderFactory, logger)
+            : base(diskProvider, configFileProvider, cacheBreakProviderFactory, logger)
         {
+            _appFolderInfo = appFolderInfo;
             _configFileProvider = configFileProvider;
             _analyticsService = analyticsService;
-
-            HtmlPath = Path.Combine(appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, "index.html");
-            UrlBase = configFileProvider.UrlBase;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+        protected override string HtmlPath => Path.Combine(FolderPath, "index.html");
+
+        protected override string MapPath(string resourceUrl)
         {
             return HtmlPath;
         }
@@ -54,7 +56,7 @@ namespace Sonarr.Http.Frontend.Mappers
             var theme = _configFileProvider.Theme;
             var sonarrState = JsonSerializer.Serialize(new
             {
-                apiRoot = $"{UrlBase}/api/v3",
+                apiRoot = $"{_configFileProvider.UrlBase}/api/v3",
                 apiKey = _configFileProvider.ApiKey,
                 release = BuildInfo.Release,
                 version = BuildInfo.Version.ToString(),
@@ -63,7 +65,7 @@ namespace Sonarr.Http.Frontend.Mappers
                 branch = _configFileProvider.Branch.ToLower(),
                 analytics = _analyticsService.IsEnabled,
                 userHash = HashUtil.AnonymousToken(),
-                urlBase = UrlBase,
+                urlBase = _configFileProvider.UrlBase,
                 isProduction = RuntimeInfo.IsProduction
             });
 
