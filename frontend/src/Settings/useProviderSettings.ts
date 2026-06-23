@@ -2,17 +2,18 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import ModelBase from 'App/ModelBase';
 import useApiMutation, {
+  addOrUpdateQueryClientItem,
   getValidationFailures,
 } from 'Helpers/Hooks/useApiMutation';
 import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
 import { usePendingFieldsStore } from 'Helpers/Hooks/usePendingFieldsStore';
-import selectSettings from 'Store/Selectors/selectSettings';
 import { PendingSection } from 'typings/pending';
 import Provider from 'typings/Provider';
 import fetchJson, { ApiError } from 'Utilities/Fetch/fetchJson';
 import getQueryPath from 'Utilities/Fetch/getQueryPath';
 import getQueryString, { QueryParams } from 'Utilities/Fetch/getQueryString';
+import selectSettings from 'Utilities/selectSettings';
 
 export type SkipValidation = 'none' | 'warnings' | 'all';
 export interface SaveOptions {
@@ -121,15 +122,9 @@ export const useSaveProviderSettings = <T extends ModelBase>(
       });
     },
     onSuccess: (updatedSettings: T) => {
-      queryClient.setQueryData<T[]>([path], (oldData = []) => {
-        if (id) {
-          return oldData.map((item) =>
-            item.id === updatedSettings.id ? updatedSettings : item
-          );
-        }
-
-        return [...oldData, updatedSettings];
-      });
+      queryClient.setQueryData<T[]>([path], (oldData = []) =>
+        addOrUpdateQueryClientItem(oldData, updatedSettings, 'id')
+      );
       onSuccess?.(updatedSettings);
     },
     onError,
@@ -338,6 +333,7 @@ export const useManageProviderSettings = <T extends ModelBase>(
             value: pendingFields.get(field.name),
           };
         }
+
         return field;
       });
 

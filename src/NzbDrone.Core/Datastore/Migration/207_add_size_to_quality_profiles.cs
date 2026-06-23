@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -155,19 +154,19 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getDefinitionsCmd = _connection.CreateCommand())
             {
                 getDefinitionsCmd.Transaction = _transaction;
-                getDefinitionsCmd.CommandText = "SELECT \"Id\", \"MinSize\", \"MaxSize\", \"PreferredSize\" FROM \"QualityDefinitions\"";
+                getDefinitionsCmd.CommandText = "SELECT \"Quality\", \"MinSize\", \"MaxSize\", \"PreferredSize\" FROM \"QualityDefinitions\"";
 
                 using (var reader = getDefinitionsCmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var id = reader.GetInt32(0);
+                        var quality = reader.GetInt32(0);
 
-                        sizes.Add(id, new Definition207
+                        sizes.Add(quality, new Definition207
                         {
-                            MinSize = GetNullableDouble(reader, 1),
-                            MaxSize = GetNullableDouble(reader, 2),
-                            PreferredSize = GetNullableDouble(reader, 3)
+                            MinSize = ReadNullableDouble(reader, 1),
+                            MaxSize = ReadNullableDouble(reader, 2),
+                            PreferredSize = ReadNullableDouble(reader, 3)
                         });
                     }
                 }
@@ -176,9 +175,14 @@ namespace NzbDrone.Core.Datastore.Migration
             return sizes;
         }
 
-        private static double? GetNullableDouble(IDataRecord reader, int index)
+        private static double? ReadNullableDouble(IDataReader reader, int index)
         {
-            return reader.IsDBNull(index) ? null : Convert.ToDouble(reader.GetValue(index));
+            if (reader.IsDBNull(index))
+            {
+                return null;
+            }
+
+            return double.TryParse(reader.GetValue(index).ToString(), out var value) ? value : null;
         }
     }
 }

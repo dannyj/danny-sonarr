@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Notifications.Plex.WatchStats;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.SeriesStats
 {
@@ -25,6 +27,8 @@ namespace NzbDrone.Core.SeriesStats
         public int? DaysSinceLastView { get; set; }
         public PlexViewTrend ViewTrend { get; set; }
         public List<string> ReleaseGroups { get; set; }
+        public List<ReleaseType> ReleaseTypes { get; set; }
+        public List<Quality> EpisodeFileQualities { get; set; }
         public List<SeasonStatistics> SeasonStatistics { get; set; }
     }
 }
