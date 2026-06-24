@@ -57,15 +57,15 @@ namespace Sonarr.Api.V3.Series
                             IManageCommandQueue commandQueueManager,
                             ISeriesDownloadCleanupService seriesDownloadCleanupService,
                             IRootFolderService rootFolderService,
-                            RootFolderValidator rootFolderValidator,
-                            MappedNetworkDriveValidator mappedNetworkDriveValidator,
-                            SeriesPathValidator seriesPathValidator,
-                            SeriesExistsValidator seriesExistsValidator,
-                            SeriesAncestorValidator seriesAncestorValidator,
-                            SystemFolderValidator systemFolderValidator,
-                            QualityProfileExistsValidator qualityProfileExistsValidator,
-                            RootFolderExistsValidator rootFolderExistsValidator,
-                            SeriesFolderAsRootFolderValidator seriesFolderAsRootFolderValidator)
+                            RootFolderValidator<SeriesResource> rootFolderValidator,
+                            MappedNetworkDriveValidator<SeriesResource> mappedNetworkDriveValidator,
+                            SeriesPathValidator<SeriesResource> seriesPathValidator,
+                            SeriesExistsValidator<SeriesResource> seriesExistsValidator,
+                            SeriesAncestorValidator<SeriesResource> seriesAncestorValidator,
+                            SystemFolderValidator<SeriesResource> systemFolderValidator,
+                            QualityProfileExistsValidator<SeriesResource> qualityProfileExistsValidator,
+                            RootFolderExistsValidator<SeriesResource> rootFolderExistsValidator,
+                            SeriesFolderAsRootFolderValidator<SeriesResource> seriesFolderAsRootFolderValidator)
             : base(signalRBroadcaster)
         {
             _seriesService = seriesService;

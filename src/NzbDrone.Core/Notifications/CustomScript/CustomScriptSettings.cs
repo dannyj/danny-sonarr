@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .IsValidPath()
-                .SetValidator(new SystemFolderValidator())
+                .SetValidator(new SystemFolderValidator<CustomScriptSettings>())
                 .WithMessage("Must not be a descendant of '{systemFolder}'");
 
             RuleFor(c => c.Arguments)

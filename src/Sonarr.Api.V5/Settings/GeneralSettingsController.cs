@@ -52,14 +52,14 @@ public class GeneralSettingsController : SettingsController<GeneralSettingsResou
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .IsValidPath()
-            .SetValidator(new FileExistsValidator(diskProvider))
+            .SetValidator(new FileExistsValidator<GeneralSettingsResource>(diskProvider))
             .IsValidCertificate()
             .When(c => c.EnableSsl);
 
         SharedValidator.RuleFor(c => c.SslKeyPath)
             .NotEmpty()
             .IsValidPath()
-            .SetValidator(new FileExistsValidator(diskProvider))
+            .SetValidator(new FileExistsValidator<GeneralSettingsResource>(diskProvider))
             .When(c => c.SslKeyPath.IsNotNullOrWhiteSpace());
 
         SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);

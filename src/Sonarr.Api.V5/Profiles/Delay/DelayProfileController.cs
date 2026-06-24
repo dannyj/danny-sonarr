@@ -15,7 +15,7 @@ public class DelayProfileController : RestController<DelayProfileResource>
 {
     private readonly IDelayProfileService _delayProfileService;
 
-    public DelayProfileController(IDelayProfileService delayProfileService, DelayProfileTagInUseValidator tagInUseValidator)
+    public DelayProfileController(IDelayProfileService delayProfileService, DelayProfileTagInUseValidator<DelayProfileResource> tagInUseValidator)
     {
         _delayProfileService = delayProfileService;
 

@@ -13,14 +13,14 @@ public class MediaManagementSettingsController : SettingsController<MediaManagem
 {
     public MediaManagementSettingsController(IConfigFileProvider configFileProvider,
         IConfigService configService,
-        PathExistsValidator pathExistsValidator,
-        FolderChmodValidator folderChmodValidator,
-        FolderWritableValidator folderWritableValidator,
-        SeriesPathValidator seriesPathValidator,
-        StartupFolderValidator startupFolderValidator,
-        SystemFolderValidator systemFolderValidator,
-        RootFolderAncestorValidator rootFolderAncestorValidator,
-        RootFolderValidator rootFolderValidator)
+        PathExistsValidator<MediaManagementSettingsResource> pathExistsValidator,
+        FolderChmodValidator<MediaManagementSettingsResource> folderChmodValidator,
+        FolderWritableValidator<MediaManagementSettingsResource> folderWritableValidator,
+        SeriesPathValidator<MediaManagementSettingsResource> seriesPathValidator,
+        StartupFolderValidator<MediaManagementSettingsResource> startupFolderValidator,
+        SystemFolderValidator<MediaManagementSettingsResource> systemFolderValidator,
+        RootFolderAncestorValidator<MediaManagementSettingsResource> rootFolderAncestorValidator,
+        RootFolderValidator<MediaManagementSettingsResource> rootFolderValidator)
         : base(configFileProvider, configService)
     {
         SharedValidator.RuleFor(c => c.RecycleBinCleanupDays).GreaterThanOrEqualTo(0);

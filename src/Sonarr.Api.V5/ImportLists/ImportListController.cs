@@ -16,8 +16,8 @@ public class ImportListController : ProviderControllerBase<ImportListResource, I
 
     public ImportListController(IBroadcastSignalRMessage signalRBroadcaster,
         IImportListFactory importListFactory,
-        RootFolderExistsValidator rootFolderExistsValidator,
-        QualityProfileExistsValidator qualityProfileExistsValidator)
+        RootFolderExistsValidator<ImportListResource> rootFolderExistsValidator,
+        QualityProfileExistsValidator<ImportListResource> qualityProfileExistsValidator)
         : base(signalRBroadcaster, importListFactory, "importlist", ResourceMapper, BulkResourceMapper)
     {
         SharedValidator.RuleFor(c => c.RootFolderPath).Cascade(CascadeMode.Stop)

@@ -1,10 +1,11 @@
+using FluentValidation;
 using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Organizer;
 
 namespace Sonarr.Api.V5.Series;
 
-public class SeriesFolderAsRootFolderValidator : PropertyValidator
+public class SeriesFolderAsRootFolderValidator<T> : PropertyValidator<T, string>
 {
     private readonly IBuildFileNames _fileNameBuilder;
 
@@ -13,11 +14,13 @@ public class SeriesFolderAsRootFolderValidator : PropertyValidator
         _fileNameBuilder = fileNameBuilder;
     }
 
-    protected override string GetDefaultMessageTemplate() => "Root folder path '{rootFolderPath}' contains series folder '{seriesFolder}'";
+    public override string Name => "SeriesFolderAsRootFolderValidator";
 
-    protected override bool IsValid(PropertyValidatorContext context)
+    protected override string GetDefaultMessageTemplate(string errorCode) => "Root folder path '{rootFolderPath}' contains series folder '{seriesFolder}'";
+
+    public override bool IsValid(ValidationContext<T> context, string value)
     {
-        if (context.PropertyValue == null)
+        if (value == null)
         {
             return true;
         }
@@ -27,18 +30,16 @@ public class SeriesFolderAsRootFolderValidator : PropertyValidator
             return true;
         }
 
-        var rootFolderPath = context.PropertyValue.ToString();
-
-        if (rootFolderPath.IsNullOrWhiteSpace())
+        if (value.IsNullOrWhiteSpace())
         {
             return true;
         }
 
-        var rootFolder = new DirectoryInfo(rootFolderPath).Name;
+        var rootFolder = new DirectoryInfo(value).Name;
         var series = seriesResource.ToModel();
         var seriesFolder = _fileNameBuilder.GetSeriesFolder(series);
 
-        context.MessageFormatter.AppendArgument("rootFolderPath", rootFolderPath);
+        context.MessageFormatter.AppendArgument("rootFolderPath", value);
         context.MessageFormatter.AppendArgument("seriesFolder", seriesFolder);
 
         if (seriesFolder == rootFolder)
