@@ -5,8 +5,10 @@ import { SelectStateInputProps } from 'typings/props';
 import TableRowCell, { TableRowCellProps } from './TableRowCell';
 import styles from './TableSelectCell.css';
 
-interface TableSelectCellProps<T extends number | string = number>
-  extends Omit<TableRowCellProps, 'id'> {
+interface TableSelectCellProps<T extends number | string = number> extends Omit<
+  TableRowCellProps,
+  'id'
+> {
   className?: string;
   id: T;
   isSelected?: boolean;

@@ -9,11 +9,10 @@ interface SeriesTag extends TagBase {
   name: string;
 }
 
-export interface SeriesTagInputProps<V>
-  extends Omit<
-    TagInputProps<SeriesTag>,
-    'tags' | 'tagList' | 'onTagAdd' | 'onTagDelete' | 'onChange'
-  > {
+export interface SeriesTagInputProps<V> extends Omit<
+  TagInputProps<SeriesTag>,
+  'tags' | 'tagList' | 'onTagAdd' | 'onTagDelete' | 'onChange'
+> {
   name: string;
   value: V;
   onChange: (change: InputChanged<V>) => void;

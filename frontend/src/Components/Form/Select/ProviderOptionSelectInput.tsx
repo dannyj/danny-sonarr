@@ -33,11 +33,10 @@ export type ProviderActionType =
   | 'getTags'
   | 'getRootFolders';
 
-export interface ProviderOptionSelectInputProps
-  extends Omit<
-    EnhancedSelectInputProps<EnhancedSelectInputValue<unknown>, unknown>,
-    'values'
-  > {
+export interface ProviderOptionSelectInputProps extends Omit<
+  EnhancedSelectInputProps<EnhancedSelectInputValue<unknown>, unknown>,
+  'values'
+> {
   provider: string;
   providerData: ProviderOptions;
   name: string;

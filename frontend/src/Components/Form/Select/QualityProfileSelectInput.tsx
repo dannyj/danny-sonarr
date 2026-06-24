@@ -51,14 +51,13 @@ const useValues = (
   }, [qualityProfiles, includeNoChange, includeNoChangeDisabled, includeMixed]);
 };
 
-export interface QualityProfileSelectInputProps
-  extends Omit<
-    EnhancedSelectInputProps<
-      EnhancedSelectInputValue<number | string>,
-      number | string
-    >,
-    'values'
-  > {
+export interface QualityProfileSelectInputProps extends Omit<
+  EnhancedSelectInputProps<
+    EnhancedSelectInputValue<number | string>,
+    number | string
+  >,
+  'values'
+> {
   name: string;
   includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;

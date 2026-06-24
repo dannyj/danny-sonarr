@@ -156,8 +156,8 @@ export const useEpisodesWithIds = (episodeIds: number[]) => {
   const queryKey = getQueryKey('episodes');
 
   return queryKey
-    ? queryClient
+    ? (queryClient
         .getQueryData<Episode[]>(queryKey)
-        ?.filter((e) => episodeIds.includes(e.id)) ?? DEFAULT_EPISODES
+        ?.filter((e) => episodeIds.includes(e.id)) ?? DEFAULT_EPISODES)
     : DEFAULT_EPISODES;
 };

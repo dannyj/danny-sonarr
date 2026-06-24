@@ -4,8 +4,7 @@ import PostgresMigrationModalContent, {
   PostgresMigrationModalContentProps,
 } from './PostgresMigrationModalContent';
 
-interface PostgresMigrationModalProps
-  extends PostgresMigrationModalContentProps {
+interface PostgresMigrationModalProps extends PostgresMigrationModalContentProps {
   isOpen: boolean;
 }
 

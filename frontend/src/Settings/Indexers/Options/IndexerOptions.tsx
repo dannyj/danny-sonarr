@@ -139,7 +139,9 @@ function IndexerOptions({
               max={120}
               unit="minutes"
               helpText={translate('PlexWatchStatsSyncIntervalHelpText')}
-              helpTextWarning={translate('PlexWatchStatsSyncIntervalHelpTextWarning')}
+              helpTextWarning={translate(
+                'PlexWatchStatsSyncIntervalHelpTextWarning'
+              )}
               onChange={handleInputChange}
               {...settings.plexWatchStatsSyncInterval}
             />

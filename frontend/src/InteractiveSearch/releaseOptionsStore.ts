@@ -9,11 +9,10 @@ import {
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 
-export interface ReleaseOptions
-  extends Omit<
-    PageableOptions,
-    'pageSize' | 'selectedFilterKey' | 'sortKey' | 'sortDirection'
-  > {
+export interface ReleaseOptions extends Omit<
+  PageableOptions,
+  'pageSize' | 'selectedFilterKey' | 'sortKey' | 'sortDirection'
+> {
   episodeSelectedFilterKey: SelectedFilterKey;
   seasonSelectedFilterKey: SelectedFilterKey;
   rejectionFilterTags: FilterBuilderTag<string, string>[];

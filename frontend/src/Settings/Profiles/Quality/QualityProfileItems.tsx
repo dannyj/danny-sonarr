@@ -18,8 +18,7 @@ import styles from './QualityProfileItems.css';
 
 export type EditQualityProfileMode = 'default' | 'editGroups' | 'editSizes';
 
-interface QualityProfileItemsProps
-  extends QualityProfileItemDragSourceActionProps {
+interface QualityProfileItemsProps extends QualityProfileItemDragSourceActionProps {
   mode: EditQualityProfileMode;
   dragQualityIndex: string | null;
   dropQualityIndex: string | null;

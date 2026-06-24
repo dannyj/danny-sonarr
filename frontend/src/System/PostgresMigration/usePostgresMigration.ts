@@ -27,28 +27,27 @@ export function usePostgresMigrationStatus() {
 
   return {
     ...result,
-    data:
-      result.data ??
-      {
-        state: 'Idle',
-        step: '',
-        message: '',
-        error: '',
-        currentDatabaseType: '',
-        restartPending: false,
-        restartRequired: false,
-        warnings: [],
-      },
+    data: result.data ?? {
+      state: 'Idle',
+      step: '',
+      message: '',
+      error: '',
+      currentDatabaseType: '',
+      restartPending: false,
+      restartRequired: false,
+      warnings: [],
+    },
   };
 }
 
 export function useValidatePostgresMigration() {
-  return useApiMutation<PostgresMigrationValidation, PostgresMigrationConnection>(
-    {
-      path: '/system/postgres-migration/validate',
-      method: 'POST',
-    }
-  );
+  return useApiMutation<
+    PostgresMigrationValidation,
+    PostgresMigrationConnection
+  >({
+    path: '/system/postgres-migration/validate',
+    method: 'POST',
+  });
 }
 
 export function useStartPostgresMigration() {

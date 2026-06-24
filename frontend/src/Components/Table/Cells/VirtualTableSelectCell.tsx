@@ -7,8 +7,9 @@ import VirtualTableRowCell, {
 } from './VirtualTableRowCell';
 import styles from './VirtualTableSelectCell.css';
 
-interface VirtualTableSelectCellProps<T extends number | string = number>
-  extends VirtualTableRowCellProps {
+interface VirtualTableSelectCellProps<
+  T extends number | string = number,
+> extends VirtualTableRowCellProps {
   inputClassName?: string;
   id: T;
   isSelected?: boolean;

@@ -18,18 +18,17 @@ import translate from 'Utilities/String/translate';
 import MediaInfo from './MediaInfo';
 import styles from './EpisodeFileRow.css';
 
-interface EpisodeFileRowProps
-  extends Pick<
-    EpisodeFile,
-    | 'path'
-    | 'size'
-    | 'languages'
-    | 'quality'
-    | 'customFormats'
-    | 'customFormatScore'
-    | 'qualityCutoffNotMet'
-    | 'mediaInfo'
-  > {
+interface EpisodeFileRowProps extends Pick<
+  EpisodeFile,
+  | 'path'
+  | 'size'
+  | 'languages'
+  | 'quality'
+  | 'customFormats'
+  | 'customFormatScore'
+  | 'qualityCutoffNotMet'
+  | 'mediaInfo'
+> {
   columns: Column[];
   onDeleteEpisodeFile(): void;
 }

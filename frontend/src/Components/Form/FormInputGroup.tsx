@@ -96,67 +96,67 @@ const componentMap: Record<InputType, ElementType> = {
 type PickProps<V, C extends InputType> = C extends 'text'
   ? TextInputProps
   : C extends 'autoComplete'
-  ? AutoCompleteInputProps
-  : C extends 'captcha'
-  ? CaptchaInputProps
-  : C extends 'check'
-  ? CheckInputProps
-  : C extends 'date'
-  ? TextInputProps
-  : C extends 'device'
-  ? DeviceInputProps
-  : C extends 'downloadClientSelect'
-  ? DownloadClientSelectInputProps
-  : C extends 'dynamicSelect'
-  ? ProviderOptionSelectInputProps
-  : C extends 'file'
-  ? TextInputProps
-  : C extends 'float'
-  ? FloatInputProps
-  : C extends 'indexerFlagsSelect'
-  ? IndexerFlagsSelectInputProps
-  : C extends 'indexerSelect'
-  ? IndexerSelectInputProps
-  : C extends 'keyValueList'
-  ? KeyValueListInputProps
-  : C extends 'languageSelect'
-  ? LanguageSelectInputProps
-  : C extends 'monitorEpisodesSelect'
-  ? MonitorEpisodesSelectInputProps
-  : C extends 'monitorNewItemsSelect'
-  ? MonitorNewItemsSelectInputProps
-  : C extends 'number'
-  ? NumberInputProps
-  : C extends 'oauth'
-  ? OAuthInputProps
-  : C extends 'password'
-  ? TextInputProps
-  : C extends 'path'
-  ? PathInputProps
-  : C extends 'qualityProfileSelect'
-  ? QualityProfileSelectInputProps
-  : C extends 'rootFolderSelect'
-  ? RootFolderSelectInputProps
-  : C extends 'select'
-  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    EnhancedSelectInputProps<any, V>
-  : C extends 'seriesTag'
-  ? SeriesTagInputProps<V>
-  : C extends 'seriesTypeSelect'
-  ? SeriesTypeSelectInputProps
-  : C extends 'tag'
-  ? SeriesTagInputProps<V>
-  : C extends 'tagSelect'
-  ? TagSelectInputProps
-  : C extends 'text'
-  ? TextInputProps
-  : C extends 'textArea'
-  ? TextAreaProps
-  : C extends 'textTag'
-  ? TextTagInputProps
-  : C extends 'umask'
-  ? UMaskInputProps
-  : never;
+    ? AutoCompleteInputProps
+    : C extends 'captcha'
+      ? CaptchaInputProps
+      : C extends 'check'
+        ? CheckInputProps
+        : C extends 'date'
+          ? TextInputProps
+          : C extends 'device'
+            ? DeviceInputProps
+            : C extends 'downloadClientSelect'
+              ? DownloadClientSelectInputProps
+              : C extends 'dynamicSelect'
+                ? ProviderOptionSelectInputProps
+                : C extends 'file'
+                  ? TextInputProps
+                  : C extends 'float'
+                    ? FloatInputProps
+                    : C extends 'indexerFlagsSelect'
+                      ? IndexerFlagsSelectInputProps
+                      : C extends 'indexerSelect'
+                        ? IndexerSelectInputProps
+                        : C extends 'keyValueList'
+                          ? KeyValueListInputProps
+                          : C extends 'languageSelect'
+                            ? LanguageSelectInputProps
+                            : C extends 'monitorEpisodesSelect'
+                              ? MonitorEpisodesSelectInputProps
+                              : C extends 'monitorNewItemsSelect'
+                                ? MonitorNewItemsSelectInputProps
+                                : C extends 'number'
+                                  ? NumberInputProps
+                                  : C extends 'oauth'
+                                    ? OAuthInputProps
+                                    : C extends 'password'
+                                      ? TextInputProps
+                                      : C extends 'path'
+                                        ? PathInputProps
+                                        : C extends 'qualityProfileSelect'
+                                          ? QualityProfileSelectInputProps
+                                          : C extends 'rootFolderSelect'
+                                            ? RootFolderSelectInputProps
+                                            : C extends 'select'
+                                              ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                EnhancedSelectInputProps<any, V>
+                                              : C extends 'seriesTag'
+                                                ? SeriesTagInputProps<V>
+                                                : C extends 'seriesTypeSelect'
+                                                  ? SeriesTypeSelectInputProps
+                                                  : C extends 'tag'
+                                                    ? SeriesTagInputProps<V>
+                                                    : C extends 'tagSelect'
+                                                      ? TagSelectInputProps
+                                                      : C extends 'text'
+                                                        ? TextInputProps
+                                                        : C extends 'textArea'
+                                                          ? TextAreaProps
+                                                          : C extends 'textTag'
+                                                            ? TextTagInputProps
+                                                            : C extends 'umask'
+                                                              ? UMaskInputProps
+                                                              : never;
 
 export interface FormInputGroupValues<T> {
   key: T;

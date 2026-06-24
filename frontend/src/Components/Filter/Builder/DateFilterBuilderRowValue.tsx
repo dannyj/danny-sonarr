@@ -31,11 +31,10 @@ function isInFilter(filterType: FilterType) {
   );
 }
 
-interface DateFilterBuilderRowValueProps<T>
-  extends Omit<
-    FilterBuilderRowValueProps<T, string, string>,
-    'filterValue' | 'onChange'
-  > {
+interface DateFilterBuilderRowValueProps<T> extends Omit<
+  FilterBuilderRowValueProps<T, string, string>,
+  'filterValue' | 'onChange'
+> {
   filterValue: string | DateFilterValue;
   onChange: InputOnChange<string | DateFilterValue>;
 }

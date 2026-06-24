@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
@@ -18,6 +18,21 @@ import styles from './DashboardPage.css';
 
 const PATH = '/dashboard';
 
+const renderNetworkValue = (item: DashboardBreakdown) =>
+  `${formatNumber(item.count)} series`;
+
+const renderQualityValue = (item: DashboardBreakdown) =>
+  `${formatNumber(item.count)} files • ${formatBytes(item.size)}`;
+
+const renderPopularSecondary = (series: DashboardSeriesEntry) =>
+  `${formatNumber(series.viewsAllTime)} all-time • ${formatNumber(series.viewsLast30Days)} last 30d`;
+
+const renderRecentSecondary = (series: DashboardSeriesEntry) =>
+  `${formatNumber(series.episodeCount)} episodes • ${formatBytes(series.sizeOnDisk)}`;
+
+const renderUpcomingSecondary = (series: DashboardSeriesEntry) =>
+  `${formatNumber(series.episodeFileCount)}/${formatNumber(series.episodeCount)} available`;
+
 function DashboardPage() {
   const uiSettings = useUiSettingsValues();
   const { data, isLoading, isError, error } = useApiQuery<Dashboard>({
@@ -27,6 +42,30 @@ function DashboardPage() {
   const growthChart = useMemo(() => {
     return buildGrowthChart(data?.growth ?? []);
   }, [data?.growth]);
+
+  const renderPopularMeta = useCallback(
+    (series: DashboardSeriesEntry) =>
+      series.lastViewedAt
+        ? `Last viewed ${formatDashboardDate(series.lastViewedAt, uiSettings)}`
+        : 'No recent view',
+    [uiSettings]
+  );
+
+  const renderRecentMeta = useCallback(
+    (series: DashboardSeriesEntry) =>
+      series.added
+        ? `Added ${formatDashboardDate(series.added, uiSettings)}`
+        : 'Added date unavailable',
+    [uiSettings]
+  );
+
+  const renderUpcomingMeta = useCallback(
+    (series: DashboardSeriesEntry) =>
+      series.nextAiring
+        ? `Next airing ${formatDashboardDate(series.nextAiring, uiSettings)}`
+        : 'No next airing',
+    [uiSettings]
+  );
 
   if (isError) {
     return (
@@ -67,7 +106,9 @@ function DashboardPage() {
 
   const viewDelta = data.watch.viewsLast30Days - data.watch.viewsPrevious30Days;
   const watchedRatio = data.totals.seriesCount
-    ? Math.round((data.watch.watchedSeriesCount / data.totals.seriesCount) * 100)
+    ? Math.round(
+        (data.watch.watchedSeriesCount / data.totals.seriesCount) * 100
+      )
     : 0;
 
   return (
@@ -275,7 +316,7 @@ function DashboardPage() {
           >
             <BreakdownList
               items={data.networks}
-              valueLabel={(item) => `${formatNumber(item.count)} series`}
+              valueLabel={renderNetworkValue}
             />
           </Panel>
 
@@ -285,9 +326,7 @@ function DashboardPage() {
           >
             <BreakdownList
               items={data.qualities}
-              valueLabel={(item) =>
-                `${formatNumber(item.count)} files • ${formatBytes(item.size)}`
-              }
+              valueLabel={renderQualityValue}
             />
           </Panel>
         </section>
@@ -299,28 +338,19 @@ function DashboardPage() {
           >
             <SeriesList
               items={data.popularSeries}
-              secondary={(series) =>
-                `${formatNumber(series.viewsAllTime)} all-time • ${formatNumber(series.viewsLast30Days)} last 30d`
-              }
-              meta={(series) =>
-                series.lastViewedAt
-                  ? `Last viewed ${formatDashboardDate(series.lastViewedAt, uiSettings)}`
-                  : 'No recent view'
-              }
+              secondary={renderPopularSecondary}
+              meta={renderPopularMeta}
             />
           </Panel>
 
-          <Panel title="Recently added" subtitle="Fresh arrivals in the library">
+          <Panel
+            title="Recently added"
+            subtitle="Fresh arrivals in the library"
+          >
             <SeriesList
               items={data.recentSeries}
-              secondary={(series) =>
-                `${formatNumber(series.episodeCount)} episodes • ${formatBytes(series.sizeOnDisk)}`
-              }
-              meta={(series) =>
-                series.added
-                  ? `Added ${formatDashboardDate(series.added, uiSettings)}`
-                  : 'Added date unavailable'
-              }
+              secondary={renderRecentSecondary}
+              meta={renderRecentMeta}
             />
           </Panel>
 
@@ -330,14 +360,8 @@ function DashboardPage() {
           >
             <SeriesList
               items={data.upcomingSeries}
-              secondary={(series) =>
-                `${formatNumber(series.episodeFileCount)}/${formatNumber(series.episodeCount)} available`
-              }
-              meta={(series) =>
-                series.nextAiring
-                  ? `Next airing ${formatDashboardDate(series.nextAiring, uiSettings)}`
-                  : 'No next airing'
-              }
+              secondary={renderUpcomingSecondary}
+              meta={renderUpcomingMeta}
             />
           </Panel>
         </section>
@@ -547,19 +571,22 @@ function LegendSwatch({
 }
 
 function formatNumber(value: number) {
-  return Intl.NumberFormat().format(value);
+  return new Intl.NumberFormat().format(value);
 }
 
 function formatSignedNumber(value: number) {
   return `${value > 0 ? '+' : ''}${formatNumber(value)}`;
 }
 
-function formatDashboardDate(date: string, uiSettings?: {
-  shortDateFormat: string;
-  showRelativeDates: boolean;
-  timeFormat: string;
-  timeZone: string;
-}) {
+function formatDashboardDate(
+  date: string,
+  uiSettings?: {
+    shortDateFormat: string;
+    showRelativeDates: boolean;
+    timeFormat: string;
+    timeZone: string;
+  }
+) {
   if (!uiSettings) {
     return moment(date).format('ll');
   }
@@ -600,13 +627,13 @@ function buildGrowthChart(points: DashboardGrowthPoint[]) {
   const mappedPoints = points.map((point, index) => {
     const x =
       paddingX +
-      (points.length === 1 ? innerWidth / 2 : (index / (points.length - 1)) * innerWidth);
+      (points.length === 1
+        ? innerWidth / 2
+        : (index / (points.length - 1)) * innerWidth);
     const seriesY =
       height - paddingY - (point.seriesCount / maxSeries) * innerHeight;
     const episodeY =
-      height -
-      paddingY -
-      (point.totalEpisodeCount / maxEpisodes) * innerHeight;
+      height - paddingY - (point.totalEpisodeCount / maxEpisodes) * innerHeight;
 
     return {
       key: point.date,

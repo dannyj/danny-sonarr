@@ -4,8 +4,10 @@ import {
 } from 'Helpers/Hooks/useOptionsStore';
 import ImportMode from './ImportMode';
 
-export interface InteractiveImportOptions
-  extends Omit<PageableOptions, 'pageSize'> {
+export interface InteractiveImportOptions extends Omit<
+  PageableOptions,
+  'pageSize'
+> {
   importMode: ImportMode;
 }
 

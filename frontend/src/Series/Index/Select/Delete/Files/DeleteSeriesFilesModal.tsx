@@ -4,8 +4,7 @@ import DeleteSeriesModalContent, {
   DeleteSeriesFilesModalContentProps,
 } from './DeleteSeriesFilesModalContent';
 
-interface DeleteSeriesFilesModalProps
-  extends DeleteSeriesFilesModalContentProps {
+interface DeleteSeriesFilesModalProps extends DeleteSeriesFilesModalContentProps {
   isOpen: boolean;
 }
 
