@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using FluentValidation;
-using FluentValidation.Internal;
 using Sonarr.Http.ClientSchema;
 
 namespace Sonarr.Http.REST
@@ -12,17 +11,19 @@ namespace Sonarr.Http.REST
     {
         public IRuleBuilderInitial<TResource, TProperty> RuleForField<TProperty>(Expression<Func<TResource, IEnumerable<Field>>> fieldListAccessor, string fieldName)
         {
-            var rule = new PropertyRule(fieldListAccessor.GetMember(), c => GetValue(c, fieldListAccessor.Compile(), fieldName), null, () => CascadeMode.Continue, typeof(TProperty), typeof(TResource));
-            rule.PropertyName = fieldName;
-            rule.SetDisplayName(fieldName);
+            var accessor = fieldListAccessor.Compile();
+            var builder = RuleFor(resource => (TProperty)GetValue(resource, accessor, fieldName));
 
-            AddRule(rule);
-            return new RuleBuilder<TResource, TProperty>(rule, this);
+            // The value is computed from a field collection rather than a real member, so the
+            // property name has to be set explicitly for validation failures to map to the field.
+            ((IRuleBuilderOptions<TResource, TProperty>)builder).OverridePropertyName(fieldName);
+
+            return builder;
         }
 
-        private static object GetValue(object container, Func<TResource, IEnumerable<Field>> fieldListAccessor, string fieldName)
+        private static object GetValue(TResource container, Func<TResource, IEnumerable<Field>> fieldListAccessor, string fieldName)
         {
-            var resource = fieldListAccessor((TResource)container).SingleOrDefault(c => c.Name == fieldName);
+            var resource = fieldListAccessor(container).SingleOrDefault(c => c.Name == fieldName);
 
             return resource?.Value;
         }

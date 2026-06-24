@@ -18,7 +18,7 @@ namespace Sonarr.Api.V3.ImportLists
         private readonly IImportListExclusionService _importListExclusionService;
 
         public ImportListExclusionController(IImportListExclusionService importListExclusionService,
-                                             ImportListExclusionExistsValidator importListExclusionExistsValidator)
+                                             ImportListExclusionExistsValidator<ImportListExclusionResource> importListExclusionExistsValidator)
         {
             _importListExclusionService = importListExclusionService;
 
