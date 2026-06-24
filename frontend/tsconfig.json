@@ -27,7 +27,7 @@
   },
   "include": [
       "./src/**/*",
-      "./.eslintrc.js",
+      "./eslint.config.mjs",
       "./build/webpack.config.js",
       "./typings/*.ts",
   ],
