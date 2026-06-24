@@ -1,10 +1,10 @@
 # Private Automation
 
-This repo is configured for a private fork workflow:
+This repo is configured as a standalone private fork:
 
-- Public pushes to `Sonarr/Sonarr` are blocked locally.
+- Public pushes to `Sonarr/Sonarr` are blocked locally by a pre-push hook safety net.
 - Docker images are published from the private repo to GHCR.
-- Upstream Sonarr changes are merged into a PR instead of going straight onto your deploy branch.
+- There is no automated upstream sync; this fork no longer tracks `Sonarr/Sonarr`.
 
 ## Branches
 
@@ -12,7 +12,6 @@ Recommended branch layout:
 
 - `production`: deployable private branch
 - `feature/*`: custom feature work
-- `automation/upstream-sync-*`: bot-created upstream merge branches
 
 ## GitHub Workflows
 
@@ -23,12 +22,6 @@ Recommended branch layout:
   - Tags include branch name and commit SHA
   - Publishes `latest` from `production`
   - Optionally deploys on your server after publishing when deploy secrets are configured
-
-- `.github/workflows/private-upstream-sync.yml`
-  - Fetches `Sonarr/Sonarr`
-  - Merges the selected upstream branch into a reusable sync branch from `production`
-  - Creates or updates a PR for review
-  - Fails if the merge needs manual conflict resolution
 
 ## Server Compose
 
@@ -76,4 +69,3 @@ To let GitHub deploy directly to your Docker server, add these repository secret
 - Set the private repo default branch to `production`.
 - Add branch protection on `production`.
 - Restrict Actions to the private repo.
-- Keep `origin` fetch-only and use `private` for all pushes.

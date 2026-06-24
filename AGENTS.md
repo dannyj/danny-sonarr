@@ -1,18 +1,17 @@
 # Agent Notes
 
-This checkout is a private Sonarr fork with custom features. Treat it as private-only delivery work.
+This checkout is a private, standalone fork with custom features. There is no upstream tie; treat it as private-only delivery work.
 
 ## Remotes And Push Safety
 
-- `origin` points at the public `Sonarr/Sonarr` repo for fetches only.
-- Public pushes must never be used from this checkout.
-- Pushes go to the `private` remote only.
-- A local pre-push hook blocks pushes to the public Sonarr repo.
+- `origin` points at the private repo `dannyj/danny-sonarr` for both fetch and push.
+- There is no public `Sonarr/Sonarr` remote configured.
+- A local pre-push hook still blocks pushes to the public Sonarr repo, as a safety net in case it is ever re-added.
 
 Before pushing, prefer:
 
 ```bash
-git push private <branch>
+git push origin <branch>
 ```
 
 ## Private Image Delivery
@@ -33,14 +32,6 @@ Example pull:
 ```bash
 docker pull ghcr.io/dannyj/sonarr-private:feature-plex-watch-stats
 ```
-
-## Upstream Sync
-
-Upstream intake is handled in:
-
-- `.github/workflows/private-upstream-sync.yml`
-
-It merges from public `Sonarr/Sonarr` into a private sync branch and opens or updates a PR against `production`.
 
 ## Local Build And Test
 

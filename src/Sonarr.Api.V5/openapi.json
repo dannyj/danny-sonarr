@@ -5,7 +5,7 @@
     "description": "Sonarr API docs - The v5 API docs apply to Sonarr v5 only.",
     "license": {
       "name": "GPL-3.0",
-      "url": "https://github.com/Sonarr/Sonarr/blob/develop/LICENSE"
+      "url": "https://github.com/dannyj/danny-sonarr/blob/production/LICENSE"
     },
     "version": "5.0.0"
   },

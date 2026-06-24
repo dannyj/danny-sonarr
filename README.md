@@ -21,7 +21,7 @@ Note: GitHub Issues are for Bugs and Feature Requests Only
 
 - [Forums](https://forums.sonarr.tv/)
 - [Discord](https://discord.gg/M6BvZn5)
-- [GitHub - Bugs and Feature Requests Only](https://github.com/Sonarr/Sonarr/issues)
+- [GitHub - Bugs and Feature Requests Only](https://github.com/dannyj/danny-sonarr/issues)
 - [IRC](https://web.libera.chat/?channels=#sonarr)
 - [Reddit](https://www.reddit.com/r/sonarr)
 - [Wiki](https://wiki.servarr.com/sonarr)

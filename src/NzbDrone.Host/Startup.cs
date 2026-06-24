@@ -123,7 +123,7 @@ namespace NzbDrone.Host
                     License = new OpenApiLicense
                     {
                         Name = "GPL-3.0",
-                        Url = new Uri("https://github.com/Sonarr/Sonarr/blob/develop/LICENSE")
+                        Url = new Uri("https://github.com/dannyj/danny-sonarr/blob/production/LICENSE")
                     }
                 });
 
@@ -135,7 +135,7 @@ namespace NzbDrone.Host
                     License = new OpenApiLicense
                     {
                         Name = "GPL-3.0",
-                        Url = new Uri("https://github.com/Sonarr/Sonarr/blob/develop/LICENSE")
+                        Url = new Uri("https://github.com/dannyj/danny-sonarr/blob/production/LICENSE")
                     }
                 });
 
