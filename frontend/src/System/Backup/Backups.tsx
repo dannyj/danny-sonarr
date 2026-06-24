@@ -13,10 +13,10 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, kinds } from 'Helpers/Props';
-import translate from 'Utilities/String/translate';
-import useSystemStatus from 'System/Status/useSystemStatus';
 import PostgresMigrationModal from 'System/PostgresMigration/PostgresMigrationModal';
 import { usePostgresMigrationStatus } from 'System/PostgresMigration/usePostgresMigration';
+import useSystemStatus from 'System/Status/useSystemStatus';
+import translate from 'Utilities/String/translate';
 import BackupRow from './BackupRow';
 import RestoreBackupModal from './RestoreBackupModal';
 import useBackups from './useBackups';
@@ -93,6 +93,18 @@ function Backups() {
     }
   }, [isBackupExecuting, wasBackupExecuting, refetch]);
 
+  const getMigrationAlertKind = () => {
+    if (postgresMigrationStatus.state === 'Succeeded') {
+      return kinds.SUCCESS;
+    }
+
+    if (postgresMigrationStatus.state === 'Failed') {
+      return kinds.DANGER;
+    }
+
+    return kinds.WARNING;
+  };
+
   return (
     <PageContent title={translate('Backups')}>
       <PageToolbar>
@@ -122,15 +134,7 @@ function Backups() {
         {isFetching ? <LoadingIndicator /> : null}
 
         {postgresMigrationStatus.state !== 'Idle' ? (
-          <Alert
-            kind={
-              postgresMigrationStatus.state === 'Succeeded'
-                ? kinds.SUCCESS
-                : postgresMigrationStatus.state === 'Failed'
-                  ? kinds.DANGER
-                  : kinds.WARNING
-            }
-          >
+          <Alert kind={getMigrationAlertKind()}>
             {postgresMigrationStatus.message || postgresMigrationStatus.state}
             {postgresMigrationStatus.error
               ? ` ${postgresMigrationStatus.error}`
