@@ -8,7 +8,8 @@ import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Series from 'Series/Series';
 
 interface AddSeriesPayload
-  extends AddSeries,
+  extends
+    AddSeries,
     Omit<
       AddSeriesOptions,
       'monitor' | 'searchForMissingEpisodes' | 'searchForCutoffUnmetEpisodes'

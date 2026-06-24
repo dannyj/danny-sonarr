@@ -5,8 +5,7 @@ import SeasonInteractiveSearchModalContent, {
   SeasonInteractiveSearchModalContentProps,
 } from './SeasonInteractiveSearchModalContent';
 
-interface SeasonInteractiveSearchModalProps
-  extends SeasonInteractiveSearchModalContentProps {
+interface SeasonInteractiveSearchModalProps extends SeasonInteractiveSearchModalContentProps {
   isOpen: boolean;
 }
 

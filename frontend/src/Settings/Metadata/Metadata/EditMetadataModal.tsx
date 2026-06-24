@@ -6,8 +6,10 @@ import EditMetadataModalContent, {
   EditMetadataModalContentProps,
 } from './EditMetadataModalContent';
 
-interface EditMetadataModalProps
-  extends Omit<EditMetadataModalContentProps, 'advancedSettings'> {
+interface EditMetadataModalProps extends Omit<
+  EditMetadataModalContentProps,
+  'advancedSettings'
+> {
   isOpen: boolean;
 }
 

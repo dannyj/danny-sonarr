@@ -169,7 +169,9 @@ function PostgresMigrationModalContent({
         </div>
 
         {validationResult ? (
-          <Alert kind={validationResult.isValid ? kinds.SUCCESS : kinds.WARNING}>
+          <Alert
+            kind={validationResult.isValid ? kinds.SUCCESS : kinds.WARNING}
+          >
             {validationResult.message}
           </Alert>
         ) : null}

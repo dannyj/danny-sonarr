@@ -18,7 +18,7 @@ function useScrollPosition(key?: string) {
   }, [pathname, navigationType]);
 
   const initialScrollTop = useMemo(
-    () => (key && navigationType === 'POP' ? scrollPositions[key] ?? 0 : 0),
+    () => (key && navigationType === 'POP' ? (scrollPositions[key] ?? 0) : 0),
     [key, navigationType]
   );
 

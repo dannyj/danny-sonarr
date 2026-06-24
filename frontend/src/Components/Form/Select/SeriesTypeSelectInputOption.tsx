@@ -5,8 +5,7 @@ import EnhancedSelectInputOption, {
 } from './EnhancedSelectInputOption';
 import styles from './SeriesTypeSelectInputOption.css';
 
-interface SeriesTypeSelectInputOptionProps
-  extends EnhancedSelectInputOptionProps {
+interface SeriesTypeSelectInputOptionProps extends EnhancedSelectInputOptionProps {
   id: string;
   value: string;
   format: string;

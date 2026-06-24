@@ -35,19 +35,18 @@ interface AddNewSeriesSuggestion {
   title: string;
 }
 
-export interface SuggestedSeries
-  extends Pick<
-    Series,
-    | 'title'
-    | 'titleSlug'
-    | 'sortTitle'
-    | 'images'
-    | 'alternateTitles'
-    | 'tvdbId'
-    | 'tvMazeId'
-    | 'imdbId'
-    | 'tmdbId'
-  > {
+export interface SuggestedSeries extends Pick<
+  Series,
+  | 'title'
+  | 'titleSlug'
+  | 'sortTitle'
+  | 'images'
+  | 'alternateTitles'
+  | 'tvdbId'
+  | 'tvMazeId'
+  | 'imdbId'
+  | 'tmdbId'
+> {
   firstCharacter: string;
   tags: Tag[];
 }

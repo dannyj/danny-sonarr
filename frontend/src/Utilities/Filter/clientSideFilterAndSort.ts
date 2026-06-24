@@ -150,7 +150,7 @@ interface ClientSideFilterAndSortOptions<T extends ModelBase, TFilter, TSort> {
 const clientSideFilterAndSort = <
   T extends ModelBase,
   TFilter = null,
-  TSort = null
+  TSort = null,
 >(
   data: ReadonlyArray<T>,
   options: ClientSideFilterAndSortOptions<T, TFilter, TSort>

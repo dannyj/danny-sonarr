@@ -4,8 +4,9 @@ import useSelectStore, {
   SelectStoreModel,
 } from 'App/Select/useSelectStore';
 
-interface SelectProviderProps<T extends SelectStoreModel<Id>>
-  extends PropsWithChildren {
+interface SelectProviderProps<
+  T extends SelectStoreModel<Id>,
+> extends PropsWithChildren {
   items: ReadonlyArray<T>;
 }
 

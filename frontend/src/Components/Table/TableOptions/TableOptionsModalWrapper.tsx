@@ -3,8 +3,10 @@ import { LinkProps } from 'Components/Link/Link';
 import Column from '../Column';
 import TableOptionsModal, { TableOptionsModalProps } from './TableOptionsModal';
 
-interface TableOptionsModalWrapperProps
-  extends Omit<TableOptionsModalProps, 'isOpen' | 'onModalClose'> {
+interface TableOptionsModalWrapperProps extends Omit<
+  TableOptionsModalProps,
+  'isOpen' | 'onModalClose'
+> {
   columns: Column[];
   children: ReactElement<LinkProps>;
 }

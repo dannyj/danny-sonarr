@@ -86,7 +86,7 @@ export interface FreeFormValue {
 
 export interface FilterBuilderTag<
   TId extends string | number | boolean,
-  TName extends string | number
+  TName extends string | number,
 > extends TagBase {
   id: TId;
   name: TName;
@@ -95,7 +95,7 @@ export interface FilterBuilderTag<
 export interface FilterBuilderRowValueProps<
   T,
   V extends string | number | boolean,
-  TagName extends string | number
+  TagName extends string | number,
 > {
   filterType: FilterType;
   filterValue: V[];
@@ -108,7 +108,7 @@ export interface FilterBuilderRowValueProps<
 function FilterBuilderRowValue<
   T,
   V extends string | number | boolean,
-  TagName extends string | number
+  TagName extends string | number,
 >({
   filterValue = [],
   selectedFilterBuilderProp,
