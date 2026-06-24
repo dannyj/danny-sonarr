@@ -140,7 +140,7 @@ function EditNotificationModalContent({
                 key={field.name}
                 {...field}
                 advancedSettings={showAdvancedSettings}
-                provider="notification"
+                provider="connection"
                 providerData={item}
                 onChange={handleFieldChange}
               />
