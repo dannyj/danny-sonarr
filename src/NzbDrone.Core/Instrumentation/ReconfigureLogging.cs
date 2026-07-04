@@ -3,8 +3,6 @@ using System.Linq;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using NLog.Targets.Syslog;
-using NLog.Targets.Syslog.Settings;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
@@ -126,15 +124,18 @@ namespace NzbDrone.Core.Instrumentation
 
         private void SetSyslogParameters(string syslogServer, int syslogPort, LogLevel minimumLogLevel)
         {
-            var syslogTarget = new SyslogTarget();
+            var syslogTarget = new SyslogTarget
+            {
+                Name = "syslogTarget",
+                Address = $"udp://{syslogServer}:{syslogPort}",
+                Rfc5424 = true,
+                SyslogAppName = _configFileProvider.InstanceName,
 
-            syslogTarget.Name = "syslogTarget";
-            syslogTarget.MessageSend.Protocol = ProtocolType.Udp;
-            syslogTarget.MessageSend.Udp.Port = syslogPort;
-            syslogTarget.MessageSend.Udp.Server = syslogServer;
-            syslogTarget.MessageSend.Retry.ConstantBackoff.BaseDelay = 500;
-            syslogTarget.MessageCreation.Rfc = RfcNumber.Rfc5424;
-            syslogTarget.MessageCreation.Rfc5424.AppName = _configFileProvider.InstanceName;
+                // NLog.Targets.Network defaults to the User facility, whereas the previous
+                // NLog.Targets.Syslog target defaulted to Kernel. Pin it to Kernel so the
+                // facility on the wire stays the same for existing installations.
+                SyslogFacility = NLog.Layouts.SyslogFacility.Kernel
+            };
 
             var loggingRule = new LoggingRule("*", minimumLogLevel, syslogTarget);
 
