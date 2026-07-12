@@ -6,6 +6,7 @@ using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.Zip;
 using NLog;
+using NzbDrone.Common.Disk;
 
 namespace NzbDrone.Common
 {
@@ -86,7 +87,15 @@ namespace NzbDrone.Common
                     var zipStream = zipFile.GetInputStream(zipEntry);
 
                     // Manipulate the output filename here as desired.
-                    var fullZipToPath = Path.Combine(destination, entryFileName);
+                    var fullZipToPath = Path.GetFullPath(Path.Combine(destination, entryFileName));
+
+                    // Guard against Zip Slip: reject entries that resolve outside the destination directory.
+                    var destinationRoot = Path.GetFullPath(destination) + Path.DirectorySeparatorChar;
+                    if (!fullZipToPath.StartsWith(destinationRoot, DiskProviderBase.PathStringComparison))
+                    {
+                        throw new IOException(string.Format("Zip entry '{0}' resolves outside the target directory and was rejected.", entryFileName));
+                    }
+
                     var directoryName = Path.GetDirectoryName(fullZipToPath);
                     if (directoryName.Length > 0)
                     {

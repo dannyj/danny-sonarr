@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Authentication
 
     public class UserService : IUserService, IHandle<ApplicationStartedEvent>
     {
-        private const int ITERATIONS = 10000;
+        private const int ITERATIONS = 210000;
         private const int SALT_SIZE = 128 / 8;
         private const int NUMBER_OF_BYTES = 256 / 8;
 

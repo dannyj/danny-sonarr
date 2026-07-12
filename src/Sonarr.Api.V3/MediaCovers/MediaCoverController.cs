@@ -28,7 +28,14 @@ namespace Sonarr.Api.V3.MediaCovers
         [HttpGet(@"{seriesId:int}/{filename:regex((.+)\.(jpg|png|gif))}")]
         public IActionResult GetMediaCover(int seriesId, string filename)
         {
-            var filePath = Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover", seriesId.ToString(), filename);
+            var seriesRoot = Path.GetFullPath(Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover", seriesId.ToString())) + Path.DirectorySeparatorChar;
+            var filePath = Path.GetFullPath(Path.Combine(seriesRoot, filename));
+
+            // Guard against path traversal via the filename segment (e.g. "..\..\file.jpg").
+            if (!filePath.StartsWith(seriesRoot, DiskProviderBase.PathStringComparison))
+            {
+                return NotFound();
+            }
 
             if (!_diskProvider.FileExists(filePath) || _diskProvider.GetFileSize(filePath) == 0)
             {

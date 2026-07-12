@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using NLog;
 using NzbDrone.Common.Extensions;
 using Sonarr.Http.ErrorManagement;
@@ -65,11 +68,20 @@ namespace Sonarr.Http.Middleware
             }
         }
 
+        // Query parameters that carry secrets and must never be written to logs.
+        private static readonly string[] SensitiveQueryParams = { "apikey", "access_token" };
+
         private static string GetRequestPathAndQuery(HttpRequest request)
         {
             if (request.QueryString.Value.IsNotNullOrWhiteSpace() && request.QueryString.Value != "?")
             {
-                return string.Concat(request.Path, request.QueryString);
+                var parameters = request.Query
+                    .Select(p => SensitiveQueryParams.Contains(p.Key, StringComparer.OrdinalIgnoreCase)
+                        ? new KeyValuePair<string, StringValues>(p.Key, "(removed)")
+                        : p)
+                    .ToList();
+
+                return string.Concat(request.Path, QueryString.Create(parameters));
             }
             else
             {
