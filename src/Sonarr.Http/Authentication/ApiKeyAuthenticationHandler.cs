@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -60,7 +62,7 @@ namespace Sonarr.Http.Authentication
                 return Task.FromResult(AuthenticateResult.NoResult());
             }
 
-            if (_apiKey == providedApiKey)
+            if (FixedTimeEquals(_apiKey, providedApiKey))
             {
                 var claims = new List<Claim>
                 {
@@ -76,6 +78,14 @@ namespace Sonarr.Http.Authentication
             }
 
             return Task.FromResult(AuthenticateResult.NoResult());
+        }
+
+        private static bool FixedTimeEquals(string expected, string provided)
+        {
+            var expectedBytes = Encoding.UTF8.GetBytes(expected ?? string.Empty);
+            var providedBytes = Encoding.UTF8.GetBytes(provided ?? string.Empty);
+
+            return CryptographicOperations.FixedTimeEquals(expectedBytes, providedBytes);
         }
 
         protected override Task HandleChallengeAsync(AuthenticationProperties properties)

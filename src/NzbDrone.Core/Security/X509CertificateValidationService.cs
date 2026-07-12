@@ -24,20 +24,20 @@ namespace NzbDrone.Core.Security
         {
             var targetHostName = string.Empty;
 
-            if (sender is not SslStream && sender is not string)
-            {
-                return true;
-            }
-
             if (sender is SslStream request)
             {
                 targetHostName = request.TargetHostName;
             }
-
-            // Mailkit passes host in sender as string
-            if (sender is string stringHost)
+            else if (sender is string stringHost)
             {
+                // Mailkit passes host in sender as string
                 targetHostName = stringHost;
+            }
+            else
+            {
+                // Unknown sender type: fail closed rather than blanket-accepting the certificate.
+                _logger.Error("Unexpected certificate validation sender of type {0}; rejecting certificate.", sender?.GetType().FullName ?? "null");
+                return sslPolicyErrors == SslPolicyErrors.None;
             }
 
             if (certificate is X509Certificate2 cert2 && cert2.SignatureAlgorithm.FriendlyName == "md5RSA")
