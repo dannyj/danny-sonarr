@@ -199,7 +199,12 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
   });
 
   const click = useClick(context);
-  const dismiss = useDismiss(context);
+
+  // On mobile the options are rendered in a Modal, which is portalled outside of
+  // both the reference and floating elements. Floating UI would treat a press on
+  // an option as an outside press and close on `pointerdown`, unmounting the
+  // option before its `click` handler could fire, so the selection was lost.
+  const dismiss = useDismiss(context, { enabled: !isMobile });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     click,

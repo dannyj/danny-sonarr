@@ -1,4 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
+import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
+import { EpisodeFileContext } from 'EpisodeFile/EpisodeFileProvider';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import Episode from './Episode';
@@ -69,18 +71,44 @@ export default useEpisodes;
 export const useSeasonEpisodes = (seriesId: number, seasonNumber: number) => {
   const { data, ...result } = useEpisodes({ seriesId });
   const { sortKey, sortDirection } = useEpisodeOptions();
+  const episodeFiles = useContext(EpisodeFileContext);
 
   const seasonEpisodes = useMemo(() => {
-    const { data: seasonEpisodes } = clientSideFilterAndSort(
+    // The path, size and custom format columns are backed by the episode's file,
+    // not the episode itself, so they need predicates to be sortable at all.
+    const getEpisodeFile = (episode: Episode): EpisodeFile | undefined =>
+      episode.episodeFileId
+        ? episodeFiles?.find((file) => file.id === episode.episodeFileId)
+        : undefined;
+
+    const sortPredicates = {
+      path: (episode: Episode) => getEpisodeFile(episode)?.path ?? '',
+      relativePath: (episode: Episode) =>
+        getEpisodeFile(episode)?.relativePath ?? '',
+      size: (episode: Episode) => getEpisodeFile(episode)?.size ?? 0,
+      customFormatScore: (episode: Episode) =>
+        getEpisodeFile(episode)?.customFormatScore ?? 0,
+    };
+
+    const { data: seasonEpisodes } = clientSideFilterAndSort<
+      Episode,
+      null,
+      typeof sortPredicates
+    >(
       data.filter((episode) => episode.seasonNumber === seasonNumber),
       {
         sortKey,
         sortDirection,
+        // Always fall back to episode number so episodes never end up in the
+        // order the API happened to return them in.
+        secondarySortKey: 'episodeNumber',
+        secondarySortDirection: sortDirection,
+        sortPredicates,
       }
     );
 
     return seasonEpisodes;
-  }, [data, seasonNumber, sortKey, sortDirection]);
+  }, [data, episodeFiles, seasonNumber, sortKey, sortDirection]);
 
   return {
     ...result,
